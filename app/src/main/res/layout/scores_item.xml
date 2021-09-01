@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:clickable="false"
+            android:minHeight="110dp"
+            app:cardBackgroundColor="#337DFA"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="130dp">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="移动应用开发"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="分数"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txt_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="44dp"
+                    android:text="课程性质："
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toStartOf="@+id/name"
+                    app:layout_constraintTop_toBottomOf="@+id/name" />
+
+                <TextView
+                    android:id="@+id/type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="课程性质"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/txt_type"
+                    app:layout_constraintTop_toTopOf="@+id/txt_type" />
+
+                <TextView
+                    android:id="@+id/txt_credit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="学分："
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/type"
+                    app:layout_constraintTop_toTopOf="@+id/type" />
+
+                <TextView
+                    android:id="@+id/credit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="学分"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/txt_credit"
+                    app:layout_constraintTop_toTopOf="@+id/txt_credit" />
+
+                <TextView
+                    android:id="@+id/txt_gpa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="绩点："
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/credit"
+                    app:layout_constraintTop_toTopOf="@+id/credit" />
+
+                <TextView
+                    android:id="@+id/GPA"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="绩点"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/txt_gpa"
+                    app:layout_constraintTop_toTopOf="@+id/txt_gpa" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

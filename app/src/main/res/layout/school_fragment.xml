@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F7F7">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/daohang_my"
+            android:layout_width="match_parent"
+            android:layout_height="83dp"
+            android:background="#FFEA98"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <RelativeLayout
+                android:id="@+id/titleRelative_school"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginTop="40dp"
+                android:background="#00FFFFFF"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/touxiang"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="12dp"
+                    app:srcCompat="@drawable/touxiang"
+                    tools:layout_centerVertical="true" />
+
+                <ImageView
+                    android:id="@+id/fanhui_jyxq"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="12dp"
+                    app:srcCompat="@drawable/ic_jia" />
+
+                <ImageView
+                    android:id="@+id/addToDo"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="56dp"
+                    app:srcCompat="@drawable/tx" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/school_refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_schoolbg"
+            app:srlEnableOverScrollDrag="false"
+            app:srlEnablePureScrollMode="false">
+
+            <ScrollView
+                android:id="@+id/school_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#F7F7F7"
+                tools:scrollbars="none">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/jianbian_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="320dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_schoolbackground"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/rw_image"
+                        android:layout_width="230dp"
+                        android:layout_height="200dp"
+                        android:layout_above="@+id/school_card"
+                        android:layout_alignEnd="@+id/school_card"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="-200dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/renwu_image"
+                        android:visibility="visible" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/school_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="200dp"
+                        android:layout_marginEnd="12dp"
+                        android:clickable="false"
+                        android:minHeight="160dp"
+                        app:cardBackgroundColor="#FFFFFF"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/jww_Layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/jww_img"
+                                    android:layout_width="28dp"
+                                    android:layout_height="23dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="24dp"
+                                    android:src="@drawable/ic_jww" />
+
+                                <TextView
+                                    android:id="@+id/jww_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="top"
+                                    android:paddingTop="0dp"
+                                    android:text="教务网"
+                                    android:textColor="@color/FontColor"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/tsg_Layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/tsg_img"
+                                    android:layout_width="28dp"
+                                    android:layout_height="23dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="24dp"
+                                    android:src="@drawable/ic_tsg" />
+
+                                <TextView
+                                    android:id="@+id/tsg_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="top"
+                                    android:paddingTop="0dp"
+                                    android:text="图书馆"
+                                    android:textColor="@color/FontColor"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ykt_Layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/ykt_img"
+                                    android:layout_width="28dp"
+                                    android:layout_height="23dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="24dp"
+                                    android:src="@drawable/ic_ykt" />
+
+                                <TextView
+                                    android:id="@+id/ykt_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="top"
+                                    android:paddingTop="0dp"
+                                    android:text="一卡通"
+                                    android:textColor="@color/FontColor"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/sdf_Layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/sdf_img"
+                                    android:layout_width="28dp"
+                                    android:layout_height="23dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="24dp"
+                                    android:src="@drawable/ic_sdf" />
+
+                                <TextView
+                                    android:id="@+id/sdf_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="top"
+                                    android:paddingTop="0dp"
+                                    android:text="水电费"
+                                    android:textColor="@color/FontColor"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ysk_Layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/ysk_img"
+                                    android:layout_width="28dp"
+                                    android:layout_height="23dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="24dp"
+                                    android:src="@drawable/ic_ykt" />
+
+                                <TextView
+                                    android:id="@+id/ysk_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="top"
+                                    android:paddingTop="0dp"
+                                    android:text="饮水卡"
+                                    android:textColor="@color/FontColor"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:layout_marginTop="80dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/dqkd_Layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/dqkd_img"
+                                    android:layout_width="28dp"
+                                    android:layout_height="23dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="12dp"
+                                    android:src="@drawable/ic_kd" />
+
+                                <TextView
+                                    android:id="@+id/dqkd_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="top"
+                                    android:paddingTop="0dp"
+                                    android:text="代取快递"
+                                    android:textColor="@color/FontColor"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/pt_Layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/pt_img"
+                                    android:layout_width="28dp"
+                                    android:layout_height="23dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="12dp"
+                                    android:src="@drawable/ic_dqkd" />
+
+                                <TextView
+                                    android:id="@+id/pt_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="top"
+                                    android:paddingTop="0dp"
+                                    android:text="跑腿"
+                                    android:textColor="@color/FontColor"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/wm_Layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/wm_img"
+                                    android:layout_width="28dp"
+                                    android:layout_height="23dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="12dp"
+                                    android:src="@drawable/ic_tsg" />
+
+                                <TextView
+                                    android:id="@+id/wm_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="top"
+                                    android:paddingTop="0dp"
+                                    android:text="图书馆"
+                                    android:textColor="@color/FontColor"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/xzcs_Layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/xzcs_img"
+                                    android:layout_width="28dp"
+                                    android:layout_height="23dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="12dp"
+                                    android:src="@drawable/ic_xz" />
+
+                                <TextView
+                                    android:id="@+id/xzcs_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="top"
+                                    android:paddingTop="0dp"
+                                    android:text="闲置出售"
+                                    android:textColor="@color/FontColor"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/swzl_Layout"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_centerVertical="true"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/swzl_img"
+                                    android:layout_width="28dp"
+                                    android:layout_height="23dp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="12dp"
+                                    android:src="@drawable/ic_swzl" />
+
+                                <TextView
+                                    android:id="@+id/swzl_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="top"
+                                    android:paddingTop="0dp"
+                                    android:text="失物招领"
+                                    android:textColor="@color/FontColor"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:id="@+id/school_card_linear"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_below="@+id/school_card"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/school_ykt_card_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="6dp"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/imageView3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginTop="12dp"
+                                    app:srcCompat="@drawable/ic_card_ykt" />
+
+                                <TextView
+                                    android:id="@+id/textView12"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginTop="4dp"
+                                    android:text="一卡通余额"
+                                    android:textColor="#333333" />
+
+                                <TextView
+                                    android:id="@+id/yktCardTime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:text="8月20日"
+                                    android:textSize="10sp" />
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/moneyText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="100元"
+                                        android:textColor="@color/yktCardZc"
+                                        android:textSize="24sp"
+                                        android:textStyle="bold" />
+
+                                </RelativeLayout>
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/school_lib_card_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:id="@+id/image_lib"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginTop="12dp"
+                                    app:srcCompat="@drawable/ic_card_tsg" />
+
+                                <TextView
+                                    android:id="@+id/lib_card_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginTop="4dp"
+                                    android:text="我的借阅"
+                                    android:textColor="#333333" />
+
+                                <TextView
+                                    android:id="@+id/lib_card_time"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="12dp"
+                                    android:text="8月20日"
+                                    android:textSize="10sp" />
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+                                    <TextView
+                                        android:id="@+id/booksText"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="1本"
+                                        android:textColor="@color/yktCardZc"
+                                        android:textSize="24sp"
+                                        android:textStyle="bold" />
+
+                                </RelativeLayout>
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                </RelativeLayout>
+            </ScrollView>
+
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+
+
+

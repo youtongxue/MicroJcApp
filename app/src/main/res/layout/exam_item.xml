@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:clickable="false"
+            android:minHeight="110dp"
+            app:cardBackgroundColor="#337DFA"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp">
+
+                <TextView
+                    android:id="@+id/exam_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="移动应用开发"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/classroom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="null"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txt_studentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="76dp"
+                    android:text="姓名"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/Exam_StudentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="null"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/txt_studentName"
+                    app:layout_constraintTop_toTopOf="@+id/txt_studentName" />
+
+                <TextView
+                    android:id="@+id/txt_Time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    android:text="考试时间："
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toStartOf="@+id/txt_studentName"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_studentName" />
+
+                <TextView
+                    android:id="@+id/exam_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="null"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/txt_Time"
+                    app:layout_constraintTop_toTopOf="@+id/txt_Time" />
+
+                <TextView
+                    android:id="@+id/txt_localNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="座位号："
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/Exam_StudentName"
+                    app:layout_constraintTop_toTopOf="@+id/Exam_StudentName" />
+
+                <TextView
+                    android:id="@+id/localNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="null"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/txt_localNumber"
+                    app:layout_constraintTop_toTopOf="@+id/txt_localNumber" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="考试形式："
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/location"
+                    app:layout_constraintTop_toTopOf="@+id/location" />
+
+                <TextView
+                    android:id="@+id/how"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="null"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/textView10"
+                    app:layout_constraintTop_toTopOf="@+id/textView10" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="校区："
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toStartOf="@+id/txt_studentName"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_studentName" />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="null"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/textView14"
+                    app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

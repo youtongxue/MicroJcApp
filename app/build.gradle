@@ -1,0 +1,94 @@
+plugins {
+    id 'com.android.application'
+}
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.service.microjc"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.28"
+        //开启模糊效果
+        renderscriptTargetApi 21
+        renderscriptSupportModeEnabled true
+
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                // 此处指定生成的apk文件名
+                outputFileName = "锦城微服务.apk"
+            }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    //添加retrofit依赖和converter
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //图片解析库
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    //弹窗库
+    implementation 'com.github.kongzue.DialogX:DialogX:0.0.43.beta6'
+    //添加对应的包文件，可根据需要选择，请将 latest.release 替换为上边的最新版本
+    implementation 'com.github.kongzue.DialogX:DialogXIOSStyle:0.0.43.beta6'
+    //implementation 'com.github.kongzue.DialogX:DialogXKongzueStyle:0.0.40'
+    implementation 'com.github.kongzue.DialogX:DialogXMIUIStyle:0.0.43.beta6'
+    // 基础依赖包，必须要依赖
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    // fragment快速实现（可选）
+    implementation 'com.gyf.immersionbar:immersionbar-components:3.0.0'
+
+    //添加时间选择器
+    implementation 'com.github.loperSeven:DateTimePicker:0.3.2'
+
+    //日历控件库
+    implementation 'com.necer.ncalendar:ncalendar:5.0.2'
+
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation "androidx.core:core-ktx:1.3.1"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.qw:soulpermission:1.3.0'
+
+    //下拉
+    implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'
+    implementation  'com.scwang.smart:refresh-header-classics:2.0.1'    //经典刷新头
+
+
+}
+repositories {
+    mavenCentral()
+}
