@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.service.microjc.Activity.Jw.JwLoginActivity;
 import com.service.microjc.Activity.Library.LibraryLoginActivity;
@@ -23,6 +24,7 @@ import com.service.microjc.Activity.Library.LibraryUserInfoActivity;
 import com.service.microjc.Activity.Ykt.YktLoginActivity;
 import com.service.microjc.Activity.Library.tsg_web_Activity;
 import com.service.microjc.Activity.Ykt.YktUserInfoActivity;
+import com.service.microjc.Activity.Ykt.pay_web_Activity;
 import com.service.microjc.InterFace.YktApi;
 import com.service.microjc.NetworkFactory;
 import com.service.microjc.R;
@@ -90,13 +92,34 @@ public class School_Fragment extends ImmersionFragment {
         LinearLayout yktLayout = view.findViewById(R.id.ykt_Layout);
         LinearLayout wmLayout = view.findViewById(R.id.wm_Layout);
         LinearLayout jwwLayout = view.findViewById(R.id.jww_Layout);
-        LinearLayout swzlLayout = view.findViewById(R.id.sdf_Layout);
+        LinearLayout sdfLayout = view.findViewById(R.id.sdf_Layout);
+        LinearLayout swzlLayout = view.findViewById(R.id.swzl_Layout);
+
+
 
         View yktCard = view.findViewById(R.id.school_ykt_card_info);//card信息
         View libCard = view.findViewById(R.id.school_lib_card_info);//card信息
 
+        swzlLayout.setOnClickListener(v -> {
+            //public static void gowxScan(Context context){
+            Context context = getContext();
+            try {
+                    Intent intent = context.getPackageManager().getLaunchIntentForPackage("com.tencent.mm");
+                    intent.putExtra("LauncherUI.From.Scaner.Shortcut", true);
+                    context.startActivity(intent);
+
+                } catch (Exception e) {
+//                    Toast.makeText(context, "没有安装微信",);
+                }
+           // }
+
+
+        });
         //测试
-        swzlLayout.setOnClickListener(v ->{
+        sdfLayout.setOnClickListener(v ->{
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), pay_web_Activity.class);
+            startActivity(intent);
 //
         });
 
@@ -195,38 +218,38 @@ public class School_Fragment extends ImmersionFragment {
     /***
      * 自动登录网络请求
      */
-    public void auto_login(String username, String password){
-        //发起网络访问
-        //实例化一个请求对象 api
-        YktApi api = NetworkFactory.YktApi();
-        Call<YktUserInfo> Y = api.getYktUserInfo(username, password);
-        Y.enqueue(new Callback<YktUserInfo>() {
-            @Override
-            public void onResponse(@NotNull Call<YktUserInfo> call, @NotNull Response<YktUserInfo> response) {
-                info = response.body();//实例化一个userinfo对象，将网络请求响应body内容给对象
-//                Log.d("自动登陆网络请求", "自动登陆结果》》》》》》》》》》》"+info.getUserName());
-                //跳转界面
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), YktUserInfoActivity.class);
-                //利用intent传参
-                //这里的  username和password只能从SharedPreferences去拿，全局变量定义的值会再程序结束后变为空值
-                intent.putExtra("username",sp.getString("USERNAME", ""));
-                intent.putExtra("password",sp.getString("PASSWORD", ""));
-                intent.putExtra("userinfo", info);
-
-                startActivity(intent);
-                //不能finish掉首页
-
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<YktUserInfo> call, @NotNull Throwable t) {
-
-
-            }
-        });
-
-    }
+//    public void auto_login(String username, String password){
+//        //发起网络访问
+//        //实例化一个请求对象 api
+//        YktApi api = NetworkFactory.YktApi();
+//        Call<Object> Y = api.getYktUserInfo(username, password);
+//        Y.enqueue(new Callback<Object>() {
+//            @Override
+//            public void onResponse(@NotNull Call<Object> call, @NotNull Response<Object> response) {
+//                info = (YktUserInfo) response.body();//实例化一个userinfo对象，将网络请求响应body内容给对象
+////                Log.d("自动登陆网络请求", "自动登陆结果》》》》》》》》》》》"+info.getUserName());
+//                //跳转界面
+//                Intent intent = new Intent();
+//                intent.setClass(getActivity(), YktUserInfoActivity.class);
+//                //利用intent传参
+//                //这里的  username和password只能从SharedPreferences去拿，全局变量定义的值会再程序结束后变为空值
+//                intent.putExtra("username",sp.getString("USERNAME", ""));
+//                intent.putExtra("password",sp.getString("PASSWORD", ""));
+//                intent.putExtra("userinfo", info);
+//
+//                startActivity(intent);
+//                //不能finish掉首页
+//
+//            }
+//
+//            @Override
+//            public void onFailure(@NotNull Call<Object> call, @NotNull Throwable t) {
+//
+//
+//            }
+//        });
+//
+//    }
 
     /**
      * 设置滚动布局

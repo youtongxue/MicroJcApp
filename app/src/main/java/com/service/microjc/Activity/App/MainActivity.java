@@ -1,6 +1,8 @@
 package com.service.microjc.Activity.App;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -71,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         SetDefault();
         CheckUpData();
         setStatus();
+        checkPermission();
 
     }
 
@@ -229,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                         .setTheme(DialogX.THEME.AUTO)
                         .setTitle("🙅‍♂️")
                         .setMessage("网络错误")
-                        .setOkButton("下载")
+                        .setOkButton("确定")
                         .setCancelable(true)
                         .setBackgroundColor(Color.parseColor("#FFFFFF"))
                         .show();
@@ -257,6 +261,25 @@ public class MainActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.hide();
     }
+
+    //检查读写权限
+    private void checkPermission() {
+        try {
+            String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            int permission = ActivityCompat.checkSelfPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE");
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+
+                int REQUEST_CODE = 0;
+                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_CODE);
+            } else {
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 

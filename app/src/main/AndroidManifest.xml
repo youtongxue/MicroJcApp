@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.service.microjc">
 
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
@@ -17,7 +16,8 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MicroJc">
+        android:theme="@style/Theme.MicroJc"
+        android:requestLegacyExternalStorage="true">
 
         <activity
             android:name=".Activity.App.SplashActivity"
@@ -56,6 +56,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.Library.tsg_web_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.Ykt.pay_web_Activity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.App.MainActivity"

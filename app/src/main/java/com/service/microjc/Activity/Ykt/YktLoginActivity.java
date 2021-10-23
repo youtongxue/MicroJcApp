@@ -16,6 +16,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.service.microjc.CustomUtils;
 import com.service.microjc.InterFace.YktApi;
 import com.service.microjc.NetworkFactory;
@@ -27,9 +28,17 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.style.IOSStyle;
+import com.service.microjc.stType.YktUserLoginInfo;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,7 +46,9 @@ import retrofit2.Response;
 public class YktLoginActivity extends AppCompatActivity {
     private String userNameValue;
     private String passwordValue;
+    public YktUserLoginInfo loginInfo = new YktUserLoginInfo();
     public YktUserInfo info = new YktUserInfo();
+    public Gson gson = new Gson();
     private EditText password;//密码输入框
     private EditText username;//账户输入框
     private CheckBox rememberKeyCheckBox;//记住密码勾选框
@@ -213,13 +224,22 @@ public class YktLoginActivity extends AppCompatActivity {
             //发起网络访问
             //实例化一个请求对象 api
             YktApi api = NetworkFactory.YktApi();
-            Call<YktUserInfo> Y = api.getYktUserInfo(userNameValue, passwordValue);
-            Y.enqueue(new Callback<YktUserInfo>() {
+            Call<ResponseBody> Y = api.getYktUserInfo(userNameValue, passwordValue);
+            Y.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(@NotNull Call<YktUserInfo> call, @NotNull Response<YktUserInfo> response) {
-                    info = response.body();//实例化一个userinfo对象，将网络请求响应body内容给对象
-                    if (info != null) {
-                        switch (info.getLoginStatus()) {
+                public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+                    String content = null;
+                    try {
+                        content = response.body().string();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Log.e("test>>>>>>>>>>>>>>>>>", "onResponse: "+content );
+
+                    loginInfo = gson.fromJson(content,YktUserLoginInfo.class);
+                    String status = loginInfo.getLoginStatus();
+                    if (status.equals("密码错误") || status.equals("账户错误")){
+                        switch (status) {
                             case "账户错误":
                                 CustomUtils.runDelayed(new Runnable() {
                                     @Override
@@ -236,16 +256,17 @@ public class YktLoginActivity extends AppCompatActivity {
                                     }
                                 }, 150);
                                 break;
-                            case "登录正常":
-                                login();//调用登录跳转
-                                break;
                         }
+
+                    }else if (status.equals("登录正常")){
+                        info = gson.fromJson(content,YktUserInfo.class);
+                        login();
                     }
 
                 }
 
                 @Override
-                public void onFailure(@NotNull Call<YktUserInfo> call, @NotNull Throwable t) {
+                public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
                     CustomUtils.runDelayed(new Runnable() {
                         @Override
                         public void run() {

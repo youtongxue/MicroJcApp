@@ -20,4 +20,6 @@
     <color name="FontColor">#333333</color>
 <!--    底部图标选中颜色-->
     <color name="SelectIcon">#FDC102</color>
+
+    <color name="ic_launcher_background">#F7D83B</color>
 </resources>

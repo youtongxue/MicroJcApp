@@ -9,9 +9,12 @@ import com.gyf.immersionbar.ImmersionBar;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -51,7 +54,31 @@ public class tsg_web_Activity extends AppCompatActivity {
         webView = findViewById(R.id.wv_webview);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);//允许JS交互
-        //        webSettings.setDomStorageEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        //设置自适应屏幕，两者合用
+        webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+        webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
+        webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
+        webSettings.setAllowFileAccess(true);//访问文件
+        webSettings.setUserAgentString("Mozilla/5.0 (Linux; U; Android 2.3.6; zh-cn; GT-S5660 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 MicroMessenger/4.5.255");
+        webView.setVerticalScrollBarEnabled(false);//去除垂直滚动
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setBlockNetworkImage(false);
+        // 修改ua使得web端正确判断
+        String ua = webView.getSettings().getUserAgentString();
+        Log.e("ua>>>>>>>", "原始UA》》》》》"+ua);
+        webView.getSettings().setUserAgentString(ua+"; 自定义标记");
+        webView.getSettings().setUserAgentString("Mozilla/5.0 (Linux; U; Android 2.3.6; zh-cn; GT-S5660 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 MicroMessenger/4.5.255");
+
+        //混合式加载https,http
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            webView.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);//https,http混合模式访问
+            //保存cookie
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.setAcceptThirdPartyCookies(webView,true);
+        }
+
         //访问网页
         webView.loadUrl("http://weixintsg.scujcc.cn/mobile/mobile");
         //系统默认会通过手机浏览器打开网页，为了能够直接通过WebView显示网页，则必须设置
@@ -73,20 +100,15 @@ public class tsg_web_Activity extends AppCompatActivity {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 daoHangTitle = findViewById(R.id.tsg_title_text);
-                daoHangTitle.setText(title);
+                if (title.equals("weixintsg.scujcc.cn/mobile/mobile/user")){
+                    daoHangTitle.setText("个人中心");
+                }else {
+                    daoHangTitle.setText(title);
+                }
+
             }
 
         });
-
-//        webView.setWebViewClient(new WebViewClient() {
-//            @Override
-//            public void onPageFinished(WebView view, String url) {
-//                super.onPageFinished(view, url);
-//                // 页面加载完成
-//                hideBottom(); // 执行隐藏底部栏方法
-//            }
-//        });
-
 
 
 
@@ -133,22 +155,15 @@ public class tsg_web_Activity extends AppCompatActivity {
      */
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
-        destroyWebView();
-    }
-
-    public void destroyWebView() {
-
-        webView.removeAllViews();
-
         if (webView != null) {
+            webView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
             webView.clearHistory();
-            webView.clearCache(true);
-            webView.loadUrl("about:blank"); // clearView() should be changed to loadUrl("about:blank"), since clearView() is deprecated now
-            webView.pauseTimers();
-            webView = null; // Note that mWebView.destroy() and mWebView = null do the exact same thing
+
+            ((ViewGroup) webView.getParent()).removeView(webView);
+            webView.destroy();
+            webView = null;
         }
+        super.onDestroy();
     }
 
     /**
@@ -158,14 +173,8 @@ public class tsg_web_Activity extends AppCompatActivity {
     public void GoBack() {
         ImageView backIcon = findViewById(R.id.fanhui_tsg);
         backIcon.setOnClickListener(v -> {
-            if (webView.canGoBack()) {
-                webView.goBack();
-            } else {
-                Intent intent = new Intent();
-                intent.setClass(tsg_web_Activity.this, MainActivity.class);
-                startActivity(intent);
+
                 finish();
-            }
 
         });
 

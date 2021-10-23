@@ -20,6 +20,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.gson.Gson;
 import com.service.microjc.CustomUtils;
 import com.service.microjc.InterFace.YktApi;
 import com.service.microjc.NetworkFactory;
@@ -35,6 +36,7 @@ import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.util.InputInfo;
 import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.service.microjc.stType.YktUserLoginInfo;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -50,12 +52,12 @@ public class YktUserInfoActivity extends AppCompatActivity {
     @SuppressLint("MissingSuperCall")
     public static final String TAG = "MAIN";
     private YktUserInfo yktUserInfo = new YktUserInfo() ;
+    public Gson gson = new Gson();
     public String username;//定义全局变量用户名和密码
     public String password;
     public String start;
     public String end;
 
-    private Boolean YktUserInfoHttp;
     private RefreshLayout refreshLayout;
 
     //布局监听
@@ -217,14 +219,20 @@ public class YktUserInfoActivity extends AppCompatActivity {
 
         //实例化一个请求对象 api
         YktApi api = NetworkFactory.YktApi();
-        Call<YktUserInfo> Y = api.getYktUserInfo(username,password);
-        Y.enqueue(new Callback<YktUserInfo>() {
+        Call<ResponseBody> Y = api.getYktUserInfo(username,password);
+        Y.enqueue(new Callback<ResponseBody>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            public void onResponse(@NotNull Call<YktUserInfo> call, @NotNull Response<YktUserInfo> response) {
-                yktUserInfo = response.body();//实例化一个userinfo对象，将网络请求响应body内容给对象
+            public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+                String content = null;
+                try {
+                    content = response.body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                YktUserInfoHttp = true;
+                yktUserInfo = gson.fromJson(content, YktUserInfo.class);//实例化一个userinfo对象，将网络请求响应body内容给对象
+
                 setCardColor();//拿到请求结果先设置card颜色
 
                 UserNameTextView.setText(yktUserInfo.getUserName());
@@ -260,7 +268,7 @@ public class YktUserInfoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NotNull Call<YktUserInfo> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
 
 
                 CustomUtils.runDelayed(new Runnable() {
@@ -616,12 +624,20 @@ public class YktUserInfoActivity extends AppCompatActivity {
     private void RefreshYktUserInfo(RefreshLayout refreshLayout){
         //实例化一个请求对象 api
         YktApi api = NetworkFactory.YktApi();
-        Call<YktUserInfo> Y = api.getYktUserInfo(username,password);
-        Y.enqueue(new Callback<YktUserInfo>() {
+        Call<ResponseBody> Y = api.getYktUserInfo(username,password);
+        Y.enqueue(new Callback<ResponseBody>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            public void onResponse(@NotNull Call<YktUserInfo> call, @NotNull Response<YktUserInfo> response) {
-                yktUserInfo = response.body();//实例化一个userinfo对象，将网络请求响应body内容给对象
+            public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+
+                String content = null;
+                try {
+                    content = response.body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                yktUserInfo = gson.fromJson(content, YktUserInfo.class);//实例化一个userinfo对象，将网络请求响应body内容给对象
 
                 setCardColor();//拿到请求结果先设置card颜色
 
@@ -630,7 +646,7 @@ public class YktUserInfoActivity extends AppCompatActivity {
                 YktMoneyTextView.setText(yktUserInfo.getMoney());
                 YktLimitMoneyTextView.setText(yktUserInfo.getLimitMoney());
 
-                refreshLayout.finishRefresh();
+                refreshLayout.finishRefresh();//停止刷新动画
 
                 //获取当前查询时间
 //                Date date = new Date();
@@ -658,7 +674,7 @@ public class YktUserInfoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NotNull Call<YktUserInfo> call, @NotNull Throwable t) {
+            public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
                 refreshLayout.finishRefresh(false);
 
 

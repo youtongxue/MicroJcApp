@@ -5,13 +5,14 @@ import com.service.microjc.stType.YktUserInfo;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface YktApi {
     //定义请求接口部分URL地址以及请求方法
     @GET("/microjc/yktlogin")
-    Call<YktUserInfo> getYktUserInfo(@Query("username") String username, @Query("password") String password);
+    Call<ResponseBody> getYktUserInfo(@Query("username") String username, @Query("password") String password);
 
     //获取消费记录
     @GET("/microjc/yktrecords")
