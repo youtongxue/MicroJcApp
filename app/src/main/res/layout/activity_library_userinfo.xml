@@ -15,39 +15,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <RelativeLayout
-            android:id="@+id/titleRelative_libuser"
+        <com.service.microjc.Activity.App.uicustomviews.TitleLayout
+            android:id="@+id/examTitle"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_marginTop="40dp"
-            android:background="#FFFFFF"
-            android:gravity="center_vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"></LinearLayout>
-
-            <ImageView
-                android:id="@+id/fanhui_jyxq"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="12dp"
-                app:srcCompat="@drawable/ic_back" />
-
-            <TextView
-                android:id="@+id/time_now"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true"
-                android:text="借阅详情"
-                android:textColor="#333333"
-                android:textSize="16sp" />
-
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            app:navBackground="@color/white"
+            app:titleName="借阅详情" />
 
     </LinearLayout>
 

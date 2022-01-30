@@ -70,7 +70,7 @@ public class ScoresInfoAdapter extends RecyclerView.Adapter<ScoresInfoAdapter.My
             score=itemView.findViewById(R.id.score);
             type=itemView.findViewById(R.id.type);
             credit=itemView.findViewById(R.id.credit);
-            gpa=itemView.findViewById(R.id.GPA);
+            gpa=itemView.findViewById(R.id.gpa);
         }
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,12 +14,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.service.microjc.Activity.Jw.JwLoginActivity;
+import com.service.microjc.Activity.Jw.JwUserInfoActivity;
 import com.service.microjc.Activity.Library.LibraryLoginActivity;
 import com.service.microjc.Activity.Library.LibraryUserInfoActivity;
 import com.service.microjc.Activity.Ykt.YktLoginActivity;
@@ -53,6 +59,7 @@ public class School_Fragment extends ImmersionFragment {
     private Boolean savePass;
 
     private YktUserInfo info;//用于接收一卡通自动登录的信息
+    private ImageView touxiang;
 
 
     @SuppressLint("InflateParams")
@@ -60,6 +67,8 @@ public class School_Fragment extends ImmersionFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.school_fragment,null);
+
+        touxiang  = view.findViewById(R.id.touxiang);
 
         //初始化
         DialogX.init(getContext());
@@ -71,6 +80,7 @@ public class School_Fragment extends ImmersionFragment {
         scroll();
         SetMargin();
         to_LibraryLoginActivity();
+        setUserImg();
 
         return view;
     }
@@ -82,21 +92,22 @@ public class School_Fragment extends ImmersionFragment {
         super.onStart();
         setMoney();
         setBooks();
+        setUserImg();
     }
 
     /**
      * 对 Layout，设置监听跳转事件
      * */
     public void to_LibraryLoginActivity(){
+        //图标 父LinearLayout
+        LinearLayout jwwLayout = view.findViewById(R.id.jww_Layout);
         LinearLayout tsgLayout = view.findViewById(R.id.tsg_Layout);
         LinearLayout yktLayout = view.findViewById(R.id.ykt_Layout);
-        LinearLayout wmLayout = view.findViewById(R.id.wm_Layout);
-        LinearLayout jwwLayout = view.findViewById(R.id.jww_Layout);
         LinearLayout sdfLayout = view.findViewById(R.id.sdf_Layout);
+        LinearLayout wmLayout = view.findViewById(R.id.wm_Layout);
         LinearLayout swzlLayout = view.findViewById(R.id.swzl_Layout);
 
-
-
+        //Card
         View yktCard = view.findViewById(R.id.school_ykt_card_info);//card信息
         View libCard = view.findViewById(R.id.school_lib_card_info);//card信息
 
@@ -117,38 +128,32 @@ public class School_Fragment extends ImmersionFragment {
         });
         //测试
         sdfLayout.setOnClickListener(v ->{
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), pay_web_Activity.class);
-            startActivity(intent);
-//
+
+
         });
 
         tsgLayout.setOnClickListener(v -> {
-            Boolean libAutoLogin;
+            Intent intent = new Intent();
             sp = getActivity().getSharedPreferences("LibraryUserLoginInfo",Context.MODE_PRIVATE);
-            libAutoLogin = sp.getBoolean("auto_isCheck",false);
-            if (libAutoLogin){
-                toLibUser("school");
-            }else {
-                Intent intent = new Intent();
+            if (sp.getString("PASSWORD","").isEmpty()){
                 intent.setClass(getActivity(), LibraryLoginActivity.class);
-                startActivity(intent);
+            }else {
+                intent.setClass(getActivity(), LibraryUserInfoActivity.class);
+                intent.putExtra("from","SchoolFragment");
             }
+            startActivity(intent);
         });
 
         yktLayout.setOnClickListener(v -> {
-            Boolean yktAutoLogin;
-            sp = getActivity().getSharedPreferences("YktUserLoginInfo", Context.MODE_PRIVATE);
-            yktAutoLogin = sp.getBoolean("auto_isCheck", false);
-            Log.e("test", "boolean>>>>>>>>>>>>>>>>>: "+yktAutoLogin);
-
-            if (yktAutoLogin){
-                toYktUser("school");
-            }else {
-                Intent intent = new Intent();
+            Intent intent = new Intent();
+            sp = getActivity().getSharedPreferences("YktUserLoginInfo",Context.MODE_PRIVATE);
+            if (sp.getString("PASSWORD","").isEmpty()){
                 intent.setClass(getActivity(), YktLoginActivity.class);
-                startActivity(intent);
+            }else {
+                intent.setClass(getActivity(), YktUserInfoActivity.class);
+                intent.putExtra("from","SchoolFragment");
             }
+            startActivity(intent);
         });
 
         wmLayout.setOnClickListener(v -> {
@@ -159,34 +164,38 @@ public class School_Fragment extends ImmersionFragment {
 
         jwwLayout.setOnClickListener(v -> {
             Intent intent = new Intent();
-            intent.setClass(getActivity(), JwLoginActivity.class);
+            sp = getActivity().getSharedPreferences("JwUserLoginInfo",Context.MODE_PRIVATE);
+            if (sp.getString("PASSWORD","").isEmpty()){
+                intent.setClass(getActivity(), JwLoginActivity.class);
+            }else {
+                intent.setClass(getActivity(), JwUserInfoActivity.class);
+                intent.putExtra("from","SchoolFragment");
+            }
             startActivity(intent);
         });
 
         yktCard.setOnClickListener(v -> {
-            sp = getActivity().getSharedPreferences("YktUserLoginInfo", Context.MODE_PRIVATE);
-            savePass = sp.getBoolean("rem_isCheck", false);
-            if (savePass&sp.getString("PASSWORD","")!=null) {
-
-//                    auto_login(sp.getString("USERNAME", ""), sp.getString("PASSWORD", ""));
-                toYktUser("schoolCard");
+            Intent intent = new Intent();
+            sp = getActivity().getSharedPreferences("YktUserLoginInfo",Context.MODE_PRIVATE);
+            if (sp.getString("PASSWORD","").isEmpty()){
+                intent.setClass(getActivity(), YktLoginActivity.class);
             }else {
-                PopTip.show("请先选择记住密码");
+                intent.setClass(getActivity(), YktUserInfoActivity.class);
+                intent.putExtra("from","SchoolFragment");
             }
-
+            startActivity(intent);
         });
 
         libCard.setOnClickListener(v -> {
+            Intent intent = new Intent();
             sp = getActivity().getSharedPreferences("LibraryUserLoginInfo",Context.MODE_PRIVATE);
-            savePass = sp.getBoolean("rem_isCheck", false);
-            if (savePass&sp.getString("PASSWORD","")!=null) {
-
-//                    auto_login(sp.getString("USERNAME", ""), sp.getString("PASSWORD", ""));
-                toLibUser("schoolCard");
+            if (sp.getString("PASSWORD","").isEmpty()){
+                intent.setClass(getActivity(), LibraryLoginActivity.class);
             }else {
-                PopTip.show("请先选择记住密码");
+                intent.setClass(getActivity(), LibraryUserInfoActivity.class);
+                intent.putExtra("from","SchoolFragment");
             }
-
+            startActivity(intent);
         });
 
     }
@@ -325,48 +334,30 @@ public class School_Fragment extends ImmersionFragment {
 
     }
 
-    /**
-     * 图标直接登录跳转
-     * */
-    private void toYktUser(String Layout){
-        sp = getActivity().getSharedPreferences("YktUserLoginInfo", Context.MODE_PRIVATE);
-        //跳转界面
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), YktUserInfoActivity.class);
-        //利用intent传参
-        //这里的  username和password只能从SharedPreferences去拿，全局变量定义的值会再程序结束后变为空值
-        intent.putExtra("username",sp.getString("USERNAME", ""));
-        intent.putExtra("password",sp.getString("PASSWORD", ""));
-        intent.putExtra("from",Layout);
-
-        startActivity(intent);
-
-    }
 
     /**
-     * 图标直接登录跳转 libUserInfo
+     * 状态栏,继承自 extends ImmersionFragment，重写 initImmersionBar，即可不走fragment生命周期改变状态栏颜色
      * */
-    private void toLibUser(String Layout){
-        sp = getActivity().getSharedPreferences("LibraryUserLoginInfo",Context.MODE_PRIVATE);
-        //跳转界面
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), LibraryUserInfoActivity.class);
-        //利用intent传参
-        //这里的  username和password只能从SharedPreferences去拿，全局变量定义的值会再程序结束后变为空值
-        intent.putExtra("username",sp.getString("USERNAME", ""));
-        intent.putExtra("password",sp.getString("PASSWORD", ""));
-        intent.putExtra("from",Layout);
-
-        startActivity(intent);
-
-    }
-
-
     @Override
     public void initImmersionBar() {
         //设置状态栏颜色
         ImmersionBar.with(getActivity())
                 .statusBarDarkFont(true, 0.2f)
                 .init();
+    }
+
+    public void setUserImg(){
+        sp = getActivity().getSharedPreferences("UserLoginInfo",Context.MODE_PRIVATE);
+        String Url = sp.getString("UserImageUrl","null");
+        if (Url.equals("null") & !sp.getBoolean("loginState",false)){
+            Toast.makeText(getContext(),"获取用户相信失败",Toast.LENGTH_LONG);
+            Drawable drawable = getActivity().getDrawable(R.drawable.touxiang);
+            touxiang.setImageDrawable(drawable);
+        }else {
+            //设置头像
+            RoundedCorners roundedCorners = new RoundedCorners(200);
+            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+            Glide.with(getContext()).load(Url).apply(options).into(touxiang);
+        }
     }
 }

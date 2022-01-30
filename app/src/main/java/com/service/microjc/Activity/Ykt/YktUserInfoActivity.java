@@ -5,14 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -21,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.google.gson.Gson;
-import com.service.microjc.CustomUtils;
+import com.service.microjc.Activity.App.Utils.CustomUtils;
 import com.service.microjc.InterFace.YktApi;
 import com.service.microjc.NetworkFactory;
 import com.service.microjc.R;
@@ -36,7 +32,6 @@ import com.kongzue.dialogx.style.IOSStyle;
 import com.kongzue.dialogx.util.InputInfo;
 import com.scwang.smart.refresh.header.ClassicsHeader;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.service.microjc.stType.YktUserLoginInfo;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -139,8 +134,6 @@ public class YktUserInfoActivity extends AppCompatActivity {
         gsText = findViewById(R.id.gs_text);
 
         clear();
-        SetMargin();
-        goBack();
         getTheIntent();
         cardFunction();
         refresh();//下拉刷新
@@ -150,46 +143,42 @@ public class YktUserInfoActivity extends AppCompatActivity {
      * 接收intent，获取参数
      * */
     private void getTheIntent(){
-        //接收LibraryLogin传过来的参数参数
         Intent intent = getIntent();
-        username = intent.getStringExtra("username");
-        password = intent.getStringExtra("password");
-        //需要判断intent来自那个activity
 
+        //需要判断intent来自那个activity
         //loginActivity那么就已经发起过网络请求，并传了信息过来
         switch (intent.getStringExtra("from")) {
+            case "SchoolFragment":
+                Log.e(TAG, " 主页进入" );
+                DialogX.globalStyle = IOSStyle.style();//设置为IOS主题
+                WaitDialog.show("正在查询");
+                getYktUserInfo();//发起网络请求
+                break;
+
             case "yktLogin":
                 Log.e(TAG, " 登录进入" );
-                yktUserInfo = (YktUserInfo) getIntent().getSerializableExtra("userinfo");
+                //接收LibraryLogin传过来的参数参数,存入当前进程内存中
+                username = intent.getStringExtra("username");
+                password = intent.getStringExtra("password");
 
+                yktUserInfo = (YktUserInfo) getIntent().getSerializableExtra("userinfo");
+                setCardColor();//判断 card状态 设置颜色
+                //设置Card文本信息
                 UserNameTextView.setText(yktUserInfo.getUserName());
                 YktStateTextView.setText(yktUserInfo.getState());
                 YktMoneyTextView.setText(yktUserInfo.getMoney());
                 YktLimitMoneyTextView.setText(yktUserInfo.getLimitMoney());
 
+                //将本次查询到的数据存入sp本地
                 Date date = new Date();
                 TimeInfo timeInfo = CustomUtils.LongToString(date);
                 yktCardTime = timeInfo.getM()+"月"+timeInfo.getD()+"日"+"  "+timeInfo.getHmString();
 
                 sp = getSharedPreferences("YktUserInfo", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
-                //将查询到到的金额存入sp
                 editor.putString("newMoney", yktUserInfo.getMoney());
                 editor.putString("lastTime", yktCardTime);
                 editor.apply();
-
-                setCardColor();//判断 card状态 设置颜色
-
-
-                break;
-            case "school":
-            case "schoolCard":
-                Log.e(TAG, " 主页进入" );
-                WaitDialog.show("正在查询");
-                getYktUserInfo();//发起网络请求
-
-                break;
-
 
         }
     }
@@ -215,7 +204,11 @@ public class YktUserInfoActivity extends AppCompatActivity {
      *
      * @return
      */
-    private void getYktUserInfo(){
+    public void getYktUserInfo(){
+        sp = getSharedPreferences("YktUserLoginInfo", Context.MODE_PRIVATE);
+        username = sp.getString("USERNAME","");
+        password = sp.getString("PASSWORD","");
+        Log.e(TAG, "getYktUserInfo: 首页进入发起网络请求的参数"+username+password);
 
         //实例化一个请求对象 api
         YktApi api = NetworkFactory.YktApi();
@@ -226,6 +219,8 @@ public class YktUserInfoActivity extends AppCompatActivity {
             public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
                 String content = null;
                 try {
+
+                    assert response.body() != null;
                     content = response.body().string();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -316,42 +311,6 @@ public class YktUserInfoActivity extends AppCompatActivity {
                 Log.d(TAG, "查看数据>>>>>>>>："+username+password+start+end);
     }
 
-    /**
-     * 获取状态栏高度，设置layout的margin——top值
-     *
-     * */
-    public void SetMargin(){
-        //获取状态栏高度
-        //屏幕高度
-        int statusBarHeight1 = 0;
-        //获取status_bar_height资源的ID
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            //根据资源ID获取响应的尺寸值
-            statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
-        }
-        Log.e("TAG", "方法1状态栏高度:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + statusBarHeight1);
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        lp.setMargins(0, statusBarHeight1, 0, 0);
-
-
-        RelativeLayout titleLayout1 = findViewById(R.id.titleRelative_yktuser);
-        titleLayout1.setLayoutParams(lp);
-
-//        setScroller();
-    }
-
-    /**
-     * 图标返回
-     * */
-    public void goBack(){
-        //图标
-        ImageView backIcon = findViewById(R.id.fanhui_yktxq);
-
-        backIcon.setOnClickListener(v -> finish());
-    }
 
     /**
      * @Description 一卡通挂失
@@ -564,13 +523,16 @@ public class YktUserInfoActivity extends AppCompatActivity {
      * 地图导航
      * */
     private void gotoBaiDuMap() {
-        // 驾车导航
-        StringBuffer sb = new StringBuffer("baidumap://map/navi")
-                .append("?coord_type=gcj02")
-                .append("&query=").append("川大锦城二食堂")
-                .append("&src=").append(this.getPackageName());
+//        // 驾车导航
+//        StringBuffer sb = new StringBuffer("baidumap://map/navi")
+//                .append("?coord_type=gcj02")
+//                .append("&query=").append("川大锦城二食堂")
+//                .append("&src=").append(this.getPackageName());
+//        Intent intent = new Intent();
+//        intent.setData(Uri.parse(sb.toString()));
+//        startActivity(intent);
         Intent intent = new Intent();
-        intent.setData(Uri.parse(sb.toString()));
+        intent.setClass(this, pay_web_Activity.class);
         startActivity(intent);
     }
 
@@ -683,8 +645,5 @@ public class YktUserInfoActivity extends AppCompatActivity {
 
 
     }
-
-
-
 
 }

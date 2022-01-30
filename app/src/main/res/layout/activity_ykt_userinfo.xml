@@ -14,52 +14,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <RelativeLayout
+        <com.service.microjc.Activity.App.uicustomviews.TitleLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/daohang_yktuser"
-                android:layout_width="match_parent"
-                android:layout_height="86dp"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <RelativeLayout
-                    android:id="@+id/titleRelative_yktuser"
-                    android:layout_width="match_parent"
-                    android:layout_height="46dp"
-                    android:layout_marginTop="40dp"
-                    android:background="#EDEDED"
-                    android:gravity="center_vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"></LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/fanhui_yktxq"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="12dp"
-                        app:srcCompat="@drawable/ic_back" />
-
-                    <TextView
-                        android:id="@+id/time_now"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="账户详情"
-                        android:textColor="#333333"
-                        android:textSize="16sp" />
-
-                </RelativeLayout>
-
-            </LinearLayout>
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            app:navBackground="@color/navbar"
+            app:titleName="账户详情" />
 
         <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:id="@+id/refreshLayout"
@@ -230,7 +189,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="96dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
                     android:clickable="false"
@@ -368,7 +327,7 @@
                                     android:layout_marginTop="6dp"
                                     android:gravity="top"
                                     android:paddingTop="0dp"
-                                    android:text="导航补办处test"
+                                    android:text="充值test"
                                     android:textColor="#82858b"
                                     android:textSize="14sp" />
                             </LinearLayout>

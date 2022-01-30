@@ -16,10 +16,14 @@ import android.widget.EditText;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.service.microjc.CustomUtils;
+import com.google.gson.Gson;
+import com.service.microjc.Activity.App.Utils.SaveUserLoginInfo;
+import com.service.microjc.Activity.App.Utils.security.AesRsa;
+import com.service.microjc.Activity.App.Utils.CustomUtils;
 import com.service.microjc.InterFace.LibraryApi;
 import com.service.microjc.NetworkFactory;
 import com.service.microjc.R;
+import com.service.microjc.stType.AppUserInfo;
 import com.service.microjc.stType.LibraryUserInfo;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
@@ -27,6 +31,7 @@ import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
 import com.kongzue.dialogx.style.IOSStyle;
+import com.service.microjc.stType.SecurityContent;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +47,6 @@ public class LibraryLoginActivity extends AppCompatActivity {
     private String passwordValue;
     private LibraryUserInfo libraryUserInfo = new LibraryUserInfo();
     private CheckBox rememberKeyCheckBox;//记住密码勾选框
-    private CheckBox autoLoginCheckBox;//自动登录选框
     private SharedPreferences sp;
 
 
@@ -57,7 +61,6 @@ public class LibraryLoginActivity extends AppCompatActivity {
         //登录button
         rememberKeyCheckBox = findViewById(R.id.lib_remember_key);
         rememberKeyCheckBox.setChecked(true);//设置默认 记住密码 初始化为true
-        autoLoginCheckBox = findViewById(R.id.lib_automatic_login);
         //对文本框实例化
         username = findViewById(R.id.LibUsername);
         password = findViewById(R.id.LibPassword);
@@ -71,7 +74,6 @@ public class LibraryLoginActivity extends AppCompatActivity {
 
         Clear();//状态栏
         SetEditTextStatus();//输入状态监听
-        setUI();//第二次进入登录界面，UI显示
         ClickLoginButton();//点击登录事件
 
     }
@@ -90,29 +92,6 @@ public class LibraryLoginActivity extends AppCompatActivity {
                 .init();
     }
 
-    /**
-     * 进入登录界面，判断是否要勾选 记住密码，自动登录，以及填充数据
-     * */
-    private void setUI(){
-        sp = getSharedPreferences("LibraryUserLoginInfo",Context.MODE_PRIVATE);
-        //判断记住密码多选框的状态
-        if (sp.getBoolean("rem_isCheck", false)) {
-            //设置默认是记录密码状态
-            rememberKeyCheckBox.setChecked(true);
-            username.setText(sp.getString("USERNAME", ""));
-            password.setText(sp.getString("PASSWORD", ""));
-            Log.d("自动恢复保存的账号密码", "自动恢复保存的账号密码");
-
-            //判断自动登陆多选框状态
-            if (sp.getBoolean("auto_isCheck", false)) {
-
-                //设置默认是自动登录状态
-                autoLoginCheckBox.setChecked(true);
-                Log.e("test", "boolean>>>>>>>>>>>>>>>>>: "+sp.getBoolean("auto_isCheck", false));
-
-            }
-        }
-    }
 
     /**
      * 设置账户和密码输入框，交互体验
@@ -237,6 +216,11 @@ public class LibraryLoginActivity extends AppCompatActivity {
                             break;
                         case "登录正常":
                             login();
+                            try {
+                                SaveUserInfo();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             break;
                     }
 
@@ -270,13 +254,11 @@ public class LibraryLoginActivity extends AppCompatActivity {
             editor.putString("USERNAME", userNameValue);
             editor.putString("PASSWORD", passwordValue);
             editor.putBoolean("rem_isCheck", rememberKeyCheckBox.isChecked());
-            editor.putBoolean("auto_isCheck", autoLoginCheckBox.isChecked());
             editor.apply();
 
             Log.d("选中保存密码", "账号：" + userNameValue +
                     "\n" + "密码：" + passwordValue +
-                    "\n" + "是否记住密码：" + rememberKeyCheckBox.isChecked() +
-                    "\n" + "是否自动登陆：" + autoLoginCheckBox.isChecked());
+                    "\n" + "是否记住密码：" + rememberKeyCheckBox.isChecked());
         }
 
         //利用intent意图跳转到第二个页面
@@ -289,6 +271,35 @@ public class LibraryLoginActivity extends AppCompatActivity {
         intent.putExtra("userinfo", libraryUserInfo);
         startActivity(intent);
         finish();
+
+    }
+
+    /**
+     * 判断是否要将用户信息上传到云端备份
+     * */
+    private void SaveUserInfo() throws Exception {
+        Log.e("TAG", "SaveUserInfo: 进入加密方法  加密一卡通信息" );
+
+
+        sp = getSharedPreferences("SwitchButton", Context.MODE_PRIVATE);//设置页面创建
+        if (rememberKeyCheckBox.isChecked() & sp.getBoolean("SaveUserInfo",false)) {
+            Log.e("TAG", "SaveUserInfo: 进入加密方法111 加密一卡通信息" );
+
+            //将要上传的信息加密
+            Gson gson = new Gson();
+            AppUserInfo appUserInfo = new AppUserInfo();
+
+            sp = getSharedPreferences("UserLoginInfo", Context.MODE_PRIVATE);
+            appUserInfo.setOpenID(sp.getString("openID", ""));
+            appUserInfo.setStudentID(Integer.parseInt(userNameValue));
+            appUserInfo.setTsgPass(passwordValue);
+            appUserInfo.setYktPass("");
+            appUserInfo.setJwwPass("");
+            SecurityContent serContent = AesRsa.clientToServer(gson.toJson(appUserInfo));
+
+
+            SaveUserLoginInfo.setUserInfo(serContent);
+        }
 
     }
 

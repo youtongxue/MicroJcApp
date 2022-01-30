@@ -3,25 +3,77 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.2" />
+        <entry key="app/myapplication/src/main/res/layout/activity_test.xml" value="0.15760869565217392" />
+        <entry key="app/src/main/res/drawable/checkedtoday.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/edit_cursor.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_about.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_canldenrbackground.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_canldenrselect.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_card_ykt.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_dqkd.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_go.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_gobutton.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_home.xml" value="0.14907407407407408" />
         <entry key="app/src/main/res/drawable/ic_home_pressed.xml" value="0.34739583333333335" />
+        <entry key="app/src/main/res/drawable/ic_info.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_jia.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_jww.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_kd.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_location.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_more.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_repeat.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_rightjiantou.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_schoolbackground.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_schoolbg.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_sdf.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_swzl.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_tab_my_normal.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_tab_my_pressed.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_tab_richeng_normal.xml" value="0.14907407407407408" />
         <entry key="app/src/main/res/drawable/ic_tab_richeng_pressed.xml" value="0.34739583333333335" />
+        <entry key="app/src/main/res/drawable/ic_time.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_tip.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_todo.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_user_updata.xml" value="0.1175925925925926" />
+        <entry key="app/src/main/res/drawable/ic_xb0.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_xbicon.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_xz.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/drawable/ic_ykt.xml" value="0.14907407407407408" />
+        <entry key="app/src/main/res/layout/activity_exam_info.xml" value="0.21" />
         <entry key="app/src/main/res/layout/activity_jw.xml" value="0.17552083333333332" />
-        <entry key="app/src/main/res/layout/activity_jw_user_info.xml" value="0.17552083333333332" />
+        <entry key="app/src/main/res/layout/activity_jw_user_info.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_library_login.xml" value="0.17552083333333332" />
+        <entry key="app/src/main/res/layout/activity_library_userinfo.xml" value="0.1890625" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.21" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.75" />
         <entry key="app/src/main/res/layout/activity_new_to_do.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_records_info.xml" value="0.26132246376811596" />
+        <entry key="app/src/main/res/layout/activity_room.xml" value="0.2828125" />
+        <entry key="app/src/main/res/layout/activity_scores_info.xml" value="0.22447916666666667" />
+        <entry key="app/src/main/res/layout/activity_seeting.xml" value="0.1890625" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.33125" />
+        <entry key="app/src/main/res/layout/activity_tsg_web.xml" value="0.22447916666666667" />
         <entry key="app/src/main/res/layout/activity_welcome.xml" value="0.33125" />
         <entry key="app/src/main/res/layout/activity_ykt_login.xml" value="0.17552083333333332" />
+        <entry key="app/src/main/res/layout/activity_ykt_userinfo.xml" value="0.22447916666666667" />
+        <entry key="app/src/main/res/layout/default_item_custom_wheel.xml" value="0.33125" />
+        <entry key="app/src/main/res/layout/dialogx_custom_wheel_picker.xml" value="0.33125" />
+        <entry key="app/src/main/res/layout/exam_item.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/jw_listview_item.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/layout_dialogx_bottom_miui.xml" value="0.33125" />
+        <entry key="app/src/main/res/layout/my_fragment.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/myfragment_listview_item.xml" value="0.75" />
+        <entry key="app/src/main/res/layout/pay_web.xml" value="0.22447916666666667" />
         <entry key="app/src/main/res/layout/record_item.xml" value="0.5" />
         <entry key="app/src/main/res/layout/richeng_fragment.xml" value="0.36141304347826086" />
+        <entry key="app/src/main/res/layout/room_item.xml" value="0.5" />
         <entry key="app/src/main/res/layout/school_fragment.xml" value="0.36141304347826086" />
+        <entry key="app/src/main/res/layout/scores_item.xml" value="0.33125" />
+        <entry key="app/src/main/res/layout/title.xml" value="0.24547101449275363" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.125" />
       </map>
     </option>
-  </component>
-  <component name="ProjectPlainTextFileTypeManager">
-    <file url="file://$PROJECT_DIR$/app/src/main/res/values/ic_launcher_background.xml" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

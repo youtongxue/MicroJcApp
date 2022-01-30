@@ -17,10 +17,14 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
-import com.service.microjc.CustomUtils;
+import com.service.microjc.Activity.App.Utils.SaveUserLoginInfo;
+import com.service.microjc.Activity.App.Utils.security.AesRsa;
+import com.service.microjc.Activity.App.Utils.CustomUtils;
 import com.service.microjc.InterFace.YktApi;
 import com.service.microjc.NetworkFactory;
 import com.service.microjc.R;
+import com.service.microjc.stType.AppUserInfo;
+import com.service.microjc.stType.SecurityContent;
 import com.service.microjc.stType.YktUserInfo;
 import com.gyf.immersionbar.BarHide;
 import com.gyf.immersionbar.ImmersionBar;
@@ -31,12 +35,8 @@ import com.kongzue.dialogx.style.IOSStyle;
 import com.service.microjc.stType.YktUserLoginInfo;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -52,7 +52,6 @@ public class YktLoginActivity extends AppCompatActivity {
     private EditText password;//密码输入框
     private EditText username;//账户输入框
     private CheckBox rememberKeyCheckBox;//记住密码勾选框
-    private CheckBox autoLoginCheckBox;//自动登录选框
     private SharedPreferences sp;
 
 
@@ -71,7 +70,6 @@ public class YktLoginActivity extends AppCompatActivity {
         //登录button
         rememberKeyCheckBox = findViewById(R.id.ykt_remember_key);
         rememberKeyCheckBox.setChecked(true);//设置默认 记住密码 初始化为true
-        autoLoginCheckBox = findViewById(R.id.ykt_automatic_login);
         //对文本框实例化
         username = findViewById(R.id.YktUsername);
         password = findViewById(R.id.YktPassword);
@@ -82,7 +80,6 @@ public class YktLoginActivity extends AppCompatActivity {
 
         Clear();//状态栏
         SetEditTextStatus();//输入状态监听
-        setUI();//第二次进入登录界面，UI显示
         ClickLoginButton();//点击登录事件
 
     }
@@ -99,30 +96,6 @@ public class YktLoginActivity extends AppCompatActivity {
         ImmersionBar.with(this)
                 .hideBar(BarHide.FLAG_HIDE_BAR)
                 .init();
-    }
-
-    /**
-     * 进入登录界面，判断是否要勾选 记住密码，自动登录，以及填充数据
-     * */
-    private void setUI(){
-        sp = getSharedPreferences("YktUserLoginInfo", Context.MODE_PRIVATE);
-        //判断记住密码多选框的状态
-        if (sp.getBoolean("rem_isCheck", false)) {
-            //设置默认是记录密码状态
-            rememberKeyCheckBox.setChecked(true);
-            username.setText(sp.getString("USERNAME", ""));
-            password.setText(sp.getString("PASSWORD", ""));
-            Log.d("自动恢复保存的账号密码", "自动恢复保存的账号密码");
-
-            //判断自动登陆多选框状态
-            if (sp.getBoolean("auto_isCheck", false)) {
-
-                //设置默认是自动登录状态
-                autoLoginCheckBox.setChecked(true);
-                Log.e("test", "boolean>>>>>>>>>>>>>>>>>: "+sp.getBoolean("auto_isCheck", false));
-
-            }
-        }
     }
 
     /**
@@ -261,6 +234,11 @@ public class YktLoginActivity extends AppCompatActivity {
                     }else if (status.equals("登录正常")){
                         info = gson.fromJson(content,YktUserInfo.class);
                         login();
+                        try {
+                            SaveUserInfo();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 }
@@ -293,13 +271,11 @@ public class YktLoginActivity extends AppCompatActivity {
             editor.putString("USERNAME", userNameValue);
             editor.putString("PASSWORD", passwordValue);
             editor.putBoolean("rem_isCheck", rememberKeyCheckBox.isChecked());
-            editor.putBoolean("auto_isCheck", autoLoginCheckBox.isChecked());
             editor.apply();
 
             Log.d("选中保存密码", "账号：" + userNameValue +
                     "\n" + "密码：" + passwordValue +
-                    "\n" + "是否记住密码：" + rememberKeyCheckBox.isChecked() +
-                    "\n" + "是否自动登陆：" + autoLoginCheckBox.isChecked());
+                    "\n" + "是否记住密码：" + rememberKeyCheckBox.isChecked());
         }
 
             //利用intent意图跳转到第二个页面
@@ -311,7 +287,36 @@ public class YktLoginActivity extends AppCompatActivity {
             intent.putExtra("from","yktLogin");
             intent.putExtra("userinfo", info);
             startActivity(intent);
-            finish();
+            finish();//需要结束当前LoginActivity
+    }
+
+    /**
+     * 判断是否要将用户信息上传到云端备份
+     * */
+    private void SaveUserInfo() throws Exception {
+        Log.e("TAG", "SaveUserInfo: 进入加密方法  加密一卡通信息" );
+
+
+        sp = getSharedPreferences("SwitchButton", Context.MODE_PRIVATE);//设置页面创建
+        if (rememberKeyCheckBox.isChecked() & sp.getBoolean("SaveUserInfo",false)) {
+            Log.e("TAG", "SaveUserInfo: 进入加密方法111 加密一卡通信息" );
+
+            //将要上传的信息加密
+            Gson gson = new Gson();
+            AppUserInfo appUserInfo = new AppUserInfo();
+
+            sp = getSharedPreferences("UserLoginInfo", Context.MODE_PRIVATE);
+            appUserInfo.setOpenID(sp.getString("openID", ""));
+            appUserInfo.setStudentID(Integer.parseInt(userNameValue));
+            appUserInfo.setYktPass(passwordValue);
+            appUserInfo.setJwwPass("");
+            appUserInfo.setTsgPass("");
+            SecurityContent serContent = AesRsa.clientToServer(gson.toJson(appUserInfo));
+
+
+            SaveUserLoginInfo.setUserInfo(serContent);
+        }
+
     }
 
 

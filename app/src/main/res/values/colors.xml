@@ -22,4 +22,10 @@
     <color name="SelectIcon">#FDC102</color>
 
     <color name="ic_launcher_background">#F7D83B</color>
+
+<!--    空教室选择时间 日历显示的颜色-->
+    <color name="dialogXCalendarToday">#2196F3</color>
+    <color name="dialogXCalendarSelected">#2196F3</color>
+    <color name="WeChat">#07C160</color>
+
 </resources>

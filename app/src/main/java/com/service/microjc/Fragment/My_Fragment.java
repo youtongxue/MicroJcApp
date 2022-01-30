@@ -1,18 +1,30 @@
 package com.service.microjc.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.service.microjc.CustomUtils;
-import com.service.microjc.Activity.App.DownloadUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.service.microjc.Activity.App.LoginActivity;
+import com.service.microjc.Activity.App.SettingActivity;
+import com.service.microjc.Activity.App.Utils.CustomUtils;
+import com.service.microjc.Activity.App.Utils.DownloadUtils;
 import com.service.microjc.InterFace.CheckUpData;
 import com.service.microjc.NetworkFactory;
 import com.service.microjc.R;
@@ -22,6 +34,8 @@ import com.gyf.immersionbar.components.ImmersionFragment;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.MessageDialog;
 import com.kongzue.dialogx.style.IOSStyle;
+import com.tencent.connect.UserInfo;
+import com.tencent.tauth.Tencent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,9 +58,16 @@ public class  My_Fragment extends ImmersionFragment {
     public ListView mListView = null;
 
     /* 图片ID数组 */
-    private final int[] mImageId = new int[] {R.drawable.ic_about, R.drawable.ic_about, R.drawable.ic_about };
+    private final int[] mImageId = new int[] {R.drawable.ic_user_login, R.drawable.ic_user_updata, R.drawable.ic_user_login, R.drawable.ic_user_setting };
     /* 文字列表数组 */
-    private final String[] mTitle = new String[] {"加入反馈QQ群", "检测升级", "关于软件"};
+    private final String[] mTitle = new String[] {"反馈与建议", "检测升级", "登录账号", "设置"};
+
+    public static Tencent mTencent;
+    private UserInfo mInfo = null;
+    private SharedPreferences sp;
+    private ImageView userImg;
+    private TextView nickNameText;
+    private ImageView userXbImg;
 
 
     @SuppressLint("InflateParams")
@@ -55,10 +76,20 @@ public class  My_Fragment extends ImmersionFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.my_fragment,null);
 
-
+        userImg = view.findViewById(R.id.userImage);
+        nickNameText = view.findViewById(R.id.username);
+        userXbImg = view.findViewById(R.id.xbicon_img);
         init();
 
         return view;
+    }
+
+    //重写 oNStart方法
+    @Override
+    public void onStart() {
+        Log.e("test", "onStart");
+        super.onStart();
+        setUserImg();
     }
 
     /**
@@ -83,11 +114,21 @@ public class  My_Fragment extends ImmersionFragment {
         //设置点击监听事件
         mListView.setOnItemClickListener((adapterView, view, i, l) -> {
 
-            if (i == 0){
-                //点击第一个拉起QQ群
-                joinQQGroup("BlnWumRzYHPzfnnw0ypeAsxGWkbJVMP4");
-            }else if (i == 1){
-                CheckUpData();
+            switch (i) {
+                case 0:
+                    //点击第一个拉起QQ群
+                    joinQQGroup("BlnWumRzYHPzfnnw0ypeAsxGWkbJVMP4");
+                    break;
+                case 1:
+                    CheckUpData();
+                    break;
+                case 2:
+                    login();
+                    break;
+                case 3:
+                    Intent intent = new Intent();
+                    intent.setClass(getContext(), SettingActivity.class);
+                    startActivity(intent);
             }
 
 //                Toast.makeText(getContext(), "Click item：" + i, Toast.LENGTH_SHORT).show();
@@ -147,8 +188,8 @@ public class  My_Fragment extends ImmersionFragment {
                             .setOkButton((baseDialog, v) -> {
 
                                 DownloadUtils downloadUtils = new DownloadUtils(getContext());
-                                String url = "http://1.14.68.248/app/锦城微服务"+getCode+".apk";
-                                String name = "锦城微服务"+getCode+".apk";
+                                String url = "http://1.14.68.248/app/We锦大"+getCode+".apk";
+                                String name = "We锦大"+getCode+".apk";
                                 downloadUtils.downloadAPK(url,name,name);
 
                                 return false;
@@ -193,4 +234,51 @@ public class  My_Fragment extends ImmersionFragment {
                 .statusBarDarkFont(false)   //状态栏字体是深色，不写默认为亮色
                 .init();
     }
+
+
+    //QQ登录测试
+    public void login(){
+        Intent intent = new Intent();
+        intent.setClass(getContext(),LoginActivity.class);
+        startActivity(intent);
+    }
+    public void setUserImg() {
+        sp = getActivity().getSharedPreferences("UserLoginInfo",Context.MODE_PRIVATE);
+        String Url = sp.getString("UserImageUrl","null");
+        String nickName = sp.getString("nickName","null");
+        String userXb = sp.getString("userXb","null");
+        Log.e("TAG", "userxb>>>>>>>>>>>>>>>>>>>: "+userXb);
+        if (Url.equals("null") & !sp.getBoolean("loginState",false)){
+            Toast.makeText(getContext(),"获取用户相信失败",Toast.LENGTH_LONG).show();
+            Drawable drawable = getActivity().getDrawable(R.drawable.touxiang);
+            Drawable drawable1 = getActivity().getDrawable(R.drawable.ic_xbicon);
+            userImg.setImageDrawable(drawable);
+            userXbImg.setImageDrawable(drawable1);
+            nickNameText.setText("用户昵称");
+        }else {
+            Log.e("用户头像链接： ",">>>>>>>>>"+Url);
+            //设置头像
+            RoundedCorners roundedCorners = new RoundedCorners(200);
+            RequestOptions options = RequestOptions.bitmapTransform(roundedCorners);
+            Glide.with(getContext()).load(Url).apply(options).into(userImg);
+            //设置昵称
+            nickNameText.setText(nickName);
+            //设置性别图片
+            Drawable drawable;
+            if (userXb.equals("男")){
+                drawable = getActivity().getDrawable(R.drawable.ic_xbicon);
+                userXbImg.setImageDrawable(drawable);
+            }else if (userXb.equals("女")){
+                drawable = getActivity().getDrawable(R.drawable.ic_xb0);
+                userXbImg.setImageDrawable(drawable);
+            }else {
+                drawable = getActivity().getDrawable(R.drawable.ic_about);
+                userXbImg.setImageDrawable(drawable);
+            }
+
+
+
+        }
+    }
+
 }

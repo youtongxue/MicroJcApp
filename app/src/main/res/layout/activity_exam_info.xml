@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activity.Jw.ExamInfoActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Activity.Jw.ExamInfoActivity">
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,61 +15,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/daohang_exam"
+        <com.service.microjc.Activity.App.uicustomviews.TitleLayout
+            android:id="@+id/examTitle"
             android:layout_width="match_parent"
-            android:layout_height="86dp"
-            android:background="#FFFFFF"
-            android:orientation="vertical"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <RelativeLayout
-                android:id="@+id/titleRelative_exam"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:layout_marginTop="40dp"
-                android:background="#FFFFFF"
-                android:gravity="center_vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"></LinearLayout>
-
-                <ImageView
-                    android:id="@+id/fanhui_jwExamInfo"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="12dp"
-                    app:srcCompat="@drawable/ic_back" />
-
-                <TextView
-                    android:id="@+id/examTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="考试查询"
-                    android:textColor="#333333"
-                    android:textSize="16sp" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            app:navBackground="@color/white"
+            app:titleName="查询" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#E5E5E5">
+            android:layout_height="60dp">
 
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp">
 
                 <TextView
                     android:id="@+id/exam_xn"
@@ -75,25 +42,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="2020-2021学年" />
-
-                <TextView
-                    android:id="@+id/textView25"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="的" />
-
-                <TextView
-                    android:id="@+id/exam_xq"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="第1学期" />
-
-            </LinearLayout>
+                    android:text="点击选择学年、学期"
+                    android:textColor="@color/FontColor" />
+            </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
 
@@ -109,4 +60,4 @@
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

@@ -10,30 +10,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.gyf.immersionbar.ImmersionBar;
-import com.kongzue.dialogx.dialogs.TipDialog;
-import com.kongzue.dialogx.dialogs.WaitDialog;
-import com.service.microjc.Activity.App.MainActivity;
-import com.service.microjc.CustomUtils;
+import com.service.microjc.Activity.App.uicustomviews.BaseActivity;
+import com.service.microjc.Activity.App.Utils.CustomUtils;
 import com.service.microjc.R;
 
 import java.io.File;
@@ -41,7 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class pay_web_Activity extends AppCompatActivity {
+public class pay_web_Activity extends BaseActivity {
     private TextView daoHangTitle;
     private WebView webView;
 
@@ -51,20 +40,6 @@ public class pay_web_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_web);
-        SetMargin();
-        GoBack();
-
-        ImmersionBar.with(pay_web_Activity.this)
-                .statusBarColor(R.color.white)
-                .navigationBarColor(R.color.white)
-                .statusBarDarkFont(true)   //状态栏字体是深色，不写默认为亮色
-                .init();
-
-        //隐藏action bar
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.hide();
-
 
         //获得控件
         webView = findViewById(R.id.wv_webview);
@@ -175,7 +150,7 @@ public class pay_web_Activity extends AppCompatActivity {
 
             @Override
             public void onReceivedTitle(WebView view, String title) {
-                daoHangTitle = findViewById(R.id.pay_title_text);
+                daoHangTitle = findViewById(R.id.navigation_title);
                 if (title.equals("https://wx.weiweixiao.net/index.php/Pct/Jfdt/login/id/VhbMf1Ok6RGAAAAWPwAVGQ/token/eCSEa39N5hGAAAAWPwAVGQ.html")){
                     daoHangTitle.setText("扫码登录");
 
@@ -191,28 +166,6 @@ public class pay_web_Activity extends AppCompatActivity {
     }
 
 
-    /**
-     * 获取状态栏高度，设置layout的margin——top值
-     */
-    public void SetMargin() {
-        //获取状态栏高度
-        int statusBarHeight1 = 0;
-        //获取status_bar_height资源的ID
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            //根据资源ID获取响应的尺寸值
-            statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
-        }
-        Log.e("TAG", "方法1状态栏高度:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + statusBarHeight1);
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        lp.setMargins(0, statusBarHeight1, 0, 0);
-
-
-        RelativeLayout titleLayout1 = findViewById(R.id.titleRelative_tsg);
-        titleLayout1.setLayoutParams(lp);
-    }
 
     /**
      * web方法
@@ -241,26 +194,6 @@ public class pay_web_Activity extends AppCompatActivity {
             webView = null;
         }
         super.onDestroy();
-    }
-
-    /**
-     * 设置返回图标监听
-     */
-    public void GoBack() {
-        ImageView backIcon = findViewById(R.id.back_pay);
-        backIcon.setOnClickListener(v -> {
-//            if (webView.canGoBack()) {
-//                webView.goBack();
-//            } else {
-//                Intent intent = new Intent();
-//                intent.setClass(pay_web_Activity.this, MainActivity.class);
-//                startActivity(intent);
-                finish();
-//            }
-
-        });
-
-
     }
 
     /**

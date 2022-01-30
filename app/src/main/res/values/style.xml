@@ -13,5 +13,10 @@
         <item name="android:windowBackground">@drawable/first</item>
     </style>
 
+    <style name="DialogXCompatThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+
 
 </resources>

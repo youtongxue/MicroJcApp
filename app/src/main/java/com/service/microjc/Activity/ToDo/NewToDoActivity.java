@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.service.microjc.CustomUtils;
+import com.service.microjc.Activity.App.Utils.CustomUtils;
 import com.service.microjc.R;
 import com.service.microjc.stType.TimeInfo;
 import com.gyf.immersionbar.ImmersionBar;

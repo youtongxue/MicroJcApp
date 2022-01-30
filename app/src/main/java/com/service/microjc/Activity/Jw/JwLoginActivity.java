@@ -14,16 +14,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.LazyHeaders;
-import com.service.microjc.CustomUtils;
+import com.google.gson.Gson;
+import com.service.microjc.Activity.App.Utils.SaveUserLoginInfo;
+import com.service.microjc.Activity.App.Utils.security.AesRsa;
+import com.service.microjc.Activity.App.Utils.CustomUtils;
 import com.service.microjc.InterFace.JwApi;
 import com.service.microjc.NetworkFactory;
 import com.service.microjc.R;
+import com.service.microjc.stType.AppUserInfo;
 import com.service.microjc.stType.JwUserInfo;
 import com.service.microjc.stType.LoginInfo;
 import com.gyf.immersionbar.BarHide;
@@ -31,6 +30,7 @@ import com.gyf.immersionbar.ImmersionBar;
 import com.kongzue.dialogx.DialogX;
 import com.kongzue.dialogx.dialogs.TipDialog;
 import com.kongzue.dialogx.dialogs.WaitDialog;
+import com.service.microjc.stType.SecurityContent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,14 +41,12 @@ import retrofit2.Response;
 public class JwLoginActivity extends AppCompatActivity {
     private EditText password;//密码输入框
     private EditText username;//账户输入框
-    private EditText checkCode;//验证码
 
     private CheckBox remember_key;//记住密码勾选框
     private SharedPreferences sp;
 
     private String userNameValue;
     private String passwordValue;
-    private String checkCodeValue;
 
     public LoginInfo info = new LoginInfo();
     public JwUserInfo jwUserInfo = new JwUserInfo();
@@ -58,39 +56,19 @@ public class JwLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jw);
-        //初始化
-        DialogX.init(this);
 
-
-        Clear();
-        SetEditTextStatus();
-
-
-        //打开Preferences，名称为userInfo，如果存在则打开它，否则创建新的Preferences
-        //Context.MODE_PRIVATE：指定该SharedPreferences数据只能被本应用程序读、写
-        //Context.MODE_WORLD_READABLE：指定该SharedPreferences数据能被其他应用程序读，但不能写
-        //Context.MODE_WORLD_WRITEABLE：指定该SharedPreferences数据能被其他应用程序读写。
-        sp = getSharedPreferences("JwUserInfo", Context.MODE_PRIVATE);
-
+        sp = getSharedPreferences("JwUserLoginInfo", Context.MODE_PRIVATE);
         //对but进行实例化
         remember_key = findViewById(R.id.jw_remember_key);
-
         //对文本框实例化
         username = findViewById(R.id.JwUsername);
         password = findViewById(R.id.JwPassword);
-        checkCode = findViewById(R.id.JwCheckCode);
-
         remember_key.setChecked(true);//设置记住密码初始化为true
 
-        //判断记住密码多选框的状态
-        if (sp.getBoolean("rem_isCheck", false)) {
-            //设置默认是记录密码状态
-            remember_key.setChecked(true);
-            username.setText(sp.getString("USERNAME", ""));
-            password.setText(sp.getString("PASSWORD", ""));
-            Log.d("自动恢复保存的账号密码", "自动恢复保存的账号密码");
-        }
-
+        //初始化
+        DialogX.init(this);
+        Clear();
+        SetEditTextStatus();
         loginFirst();
         loginButtonListener();
 
@@ -110,13 +88,12 @@ public class JwLoginActivity extends AppCompatActivity {
                         assert info != null;
                         Log.d(">>>>>>>", "当session值为》》》》》》》》：" + info.getSessionId());
 
-                        getCheckCode();//调用显示验证码方法，防止空指针
+                        //getCheckCode();//调用显示验证码方法，防止空指针
 
                     }
 
                     @Override
                     public void onFailure(@NotNull Call<LoginInfo> call, @NotNull Throwable t) {
-
 
                     }
                 });
@@ -125,41 +102,39 @@ public class JwLoginActivity extends AppCompatActivity {
     /**
      * 获取验证码
      * */
-    public void getCheckCode(){
-        ImageView checkCode_img = findViewById(R.id.checkcode);
-        GlideUrl glideUrl = new GlideUrl("http://1.14.68.248:8090/microjc/getcheckcode.jpg", new LazyHeaders.Builder()
-                .addHeader("Session", info.getSessionId())
-                .build());
-        Glide.with(JwLoginActivity.this)
-                .load(glideUrl)
-                .skipMemoryCache(true) // 不使用内存缓存
-                .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁盘缓存
-                .into(checkCode_img);
-
-        checkCode_img.setOnClickListener(v -> {
-            GlideUrl glideUrl1 = new GlideUrl("http://1.14.68.248:8090/microjc/getcheckcode.jpg", new LazyHeaders.Builder()
-                    .addHeader("Session", info.getSessionId())
-                    .build());
-            Glide.with(JwLoginActivity.this)
-                    .load(glideUrl1)
-                    .skipMemoryCache(true) // 不使用内存缓存
-                    .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁盘缓存
-                    .into(checkCode_img);
-        });
-
-
-    }
+//    public void getCheckCode(){
+//        ImageView checkCode_img = findViewById(R.id.checkcode);
+//        GlideUrl glideUrl = new GlideUrl("http://1.14.68.248:8090/microjc/getcheckcode.jpg", new LazyHeaders.Builder()
+//                .addHeader("Session", info.getSessionId())
+//                .build());
+//        Glide.with(JwLoginActivity.this)
+//                .load(glideUrl)
+//                .skipMemoryCache(true) // 不使用内存缓存
+//                .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁盘缓存
+//                .into(checkCode_img);
+//
+//        checkCode_img.setOnClickListener(v -> {
+//            GlideUrl glideUrl1 = new GlideUrl("http://1.14.68.248:8090/microjc/getcheckcode.jpg", new LazyHeaders.Builder()
+//                    .addHeader("Session", info.getSessionId())
+//                    .build());
+//            Glide.with(JwLoginActivity.this)
+//                    .load(glideUrl1)
+//                    .skipMemoryCache(true) // 不使用内存缓存
+//                    .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁盘缓存
+//                    .into(checkCode_img);
+//        });
+//
+//
+//    }
 
     /**
      * 状态栏管理
      * */
     public void Clear(){
-
         //隐藏状态栏和底部导航栏
         ImmersionBar.with(this)
                 .hideBar(BarHide.FLAG_HIDE_BAR)
                 .init();
-
         //隐藏action bar
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -174,10 +149,9 @@ public class JwLoginActivity extends AppCompatActivity {
         //username输入框
 
         //根据password textview的输入状态，调整是否显示 有颜色的登录button>>>    具体是继承TextWatcher类，重写 onTextChanged方法
-//        password = findViewById(R.id.JwPassword);
-        checkCode = findViewById(R.id.JwCheckCode);
+        password = findViewById(R.id.JwPassword);
         Button loginColor = findViewById(R.id.JwLogin_color);
-        checkCode.addTextChangedListener(new TextWatcher() {
+        password.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -185,7 +159,7 @@ public class JwLoginActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String pass = checkCode.getText().toString();
+                String pass = password.getText().toString();
                 if (TextUtils.isEmpty(pass)){
                     loginColor.setVisibility(View.INVISIBLE);
                 }else {
@@ -243,7 +217,6 @@ public class JwLoginActivity extends AppCompatActivity {
             //获取到输入账号、密码等
             userNameValue = username.getText().toString();
             passwordValue = password.getText().toString();
-            checkCodeValue = checkCode.getText().toString();
 
             Login();
         });
@@ -259,13 +232,6 @@ public class JwLoginActivity extends AppCompatActivity {
         //登录网络请求
         info.setUsername(userNameValue);
         info.setPassword(passwordValue);
-        info.setCheckCode(checkCodeValue);
-
-        Log.e("test","info信息>>>>>>>>>>>>>>>>>>"+info.getSessionId());
-        Log.e("test","info信息>>>>>>>>>>>>>>>>>>"+info.getUsername());
-        Log.e("test","info信息>>>>>>>>>>>>>>>>>>"+info.getPassword());
-        Log.e("test","info信息>>>>>>>>>>>>>>>>>>"+info.getCheckCode());
-//        Log.d("test","info信息>>>>>>>>>>>>>>>>>>"+info.getSessionId());
 
         JwApi api = NetworkFactory.jwApi();
         Call<JwUserInfo> Y = api.getLoginStatus(info);
@@ -280,7 +246,7 @@ public class JwLoginActivity extends AppCompatActivity {
 
                 Log.e(">>>>>>>", "判断jwUserInfo值是否为空》》》》》》》》：" + jwUserInfo.getLoginStatus());
 
-                getCheckCode();//调用显示验证码方法，防止空指针
+                //getCheckCode();//调用显示验证码方法，防止空指针
 
                 //判断登录状态
                 switch (jwUserInfo.getLoginStatus()) {
@@ -313,19 +279,26 @@ public class JwLoginActivity extends AppCompatActivity {
                             }
                         }, 150);
                         break;
-                    case "验证码错误":
-                        CustomUtils.runDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                TipDialog.show("验证码错误", WaitDialog.TYPE.ERROR);
-                            }
-                        }, 150);
+//                    case "验证码错误":
+//                        CustomUtils.runDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                TipDialog.show("验证码错误", WaitDialog.TYPE.ERROR);
+//                            }
+//                        }, 150);
+//                        break;
+                    case "验证码错误,正在重试":
+                        //如果自动识别验证码错误，则重试
+                        //Login();
+                        TipDialog.show("自动识别验证码错误", WaitDialog.TYPE.ERROR,2000);
+                        finish();
                         break;
                     case "登录正常":
                         WaitDialog.dismiss();
                         to_JwUserInfoActivity();
                         //判断是否需要保存密码到本地
                         if (remember_key.isChecked()) {
+                            sp = getSharedPreferences("JwUserLoginInfo", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = sp.edit();//实例化一个sp对象
                             //如果记住密码选中则，将用户名、密码存入SP中
                             editor.putString("USERNAME", userNameValue);
@@ -336,7 +309,12 @@ public class JwLoginActivity extends AppCompatActivity {
                             Log.d("选中保存密码", "账号：" + userNameValue +
                                     "\n" + "密码：" + passwordValue +
                                     "\n" + "是否记住密码：" + remember_key.isChecked());
-                            //发起登录网络请求
+                        }
+                        //判断是否备份到云端
+                        try {
+                            SaveUserInfo();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                         break;
                 }
@@ -364,17 +342,41 @@ public class JwLoginActivity extends AppCompatActivity {
 
         //利用intent意图跳转到第二个页面
         Intent intent = new Intent();
-        intent.setClass(    JwLoginActivity.this, JwUserInfoActivity.class);
+        intent.setClass(JwLoginActivity.this, JwUserInfoActivity.class);
         //利用intent传参
+        intent.putExtra("from","jwLogin");
         intent.putExtra("loginInfo",info);
         startActivity(intent);
         finish();
 
-        Log.e("test","info信息>>>>>>>>>>>>>>>>>>"+info.getSessionId());
-        Log.e("test","info信息>>>>>>>>>>>>>>>>>>"+info.getUsername());
-        Log.e("test","info信息>>>>>>>>>>>>>>>>>>"+info.getPassword());
-        Log.e("test","info信息>>>>>>>>>>>>>>>>>>"+info.getCheckCode());
-        Log.e("test","info信息>>>>>>>>>>>>>>>>>>"+info.getStudentName());
+    }
+
+    /**
+     * 判断是否要将用户信息上传到云端备份
+     * */
+    private void SaveUserInfo() throws Exception {
+        Log.e("TAG", "SaveUserInfo: 进入加密方法" );
+
+
+        sp = getSharedPreferences("SwitchButton", Context.MODE_PRIVATE);//设置页面创建
+        if (remember_key.isChecked() & sp.getBoolean("SaveUserInfo",false)) {
+            Log.e("TAG", "SaveUserInfo: 进入加密方法1111111" );
+
+            //将要上传的信息加密
+            Gson gson = new Gson();
+            AppUserInfo appUserInfo = new AppUserInfo();
+
+            sp = getSharedPreferences("UserLoginInfo", Context.MODE_PRIVATE);
+            appUserInfo.setOpenID(sp.getString("openID", ""));
+            appUserInfo.setTsgPass("");
+            appUserInfo.setYktPass("");
+            appUserInfo.setStudentID(Integer.parseInt(userNameValue));
+            appUserInfo.setJwwPass(passwordValue);
+            SecurityContent serContent = AesRsa.clientToServer(gson.toJson(appUserInfo));
+
+
+            SaveUserLoginInfo.setUserInfo(serContent);
+        }
 
     }
 

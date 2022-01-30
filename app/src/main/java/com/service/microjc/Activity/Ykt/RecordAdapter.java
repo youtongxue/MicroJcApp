@@ -43,16 +43,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyHolder> 
         String url;
 //        Picasso.with(context).load(data.get(i).getShopImage()).into(myHolder.im);
         //Glide加载图片
-        if (data.get(i).getType().equals("微信转入")){
-            url = "http://1.14.68.248/images/wxcz.png";
-            Glide.with(context).load(url).into(myHolder.im);
-        }else if (data.get(i).getType().equals("支付宝转入")){
-            url = "http://1.14.68.248/images/zfbcz.png";
-            Glide.with(context).load(url).into(myHolder.im);
-        }
-        else {
-            Glide.with(context).load(data.get(i).getShopImage()).into(myHolder.im);
-        }
+
+        Glide.with(context).load(data.get(i).getShopImage()).into(myHolder.im);
+        Log.e(TAG, "onBindViewHolder:  店铺图片 》》》》 "+(data.get(i).getShopImage())) ;
 
 
         //判断商户名是否为空，如果为空则返回机器编号
@@ -64,22 +57,17 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.MyHolder> 
         }
 
         //如果是 微信充值则为➕，其他则为➖
-        if (data.get(i).getType().equals("微信转入")){
-            myHolder.shop.setText("微信充值");
-
+        if (data.get(i).getType().equals("微信充值")){
             spentMoney = "＋"+data.get(i).getSpentMoney();
             myHolder.spent.setTextColor(Color.parseColor("#45BB35"));
             myHolder.spent.setText(spentMoney);
             myHolder.time.setText(data.get(i).getTime());
-        }else if (data.get(i).getType().equals("支付宝转入")){
-            myHolder.shop.setText("支付宝充值");
-
+        }else if (data.get(i).getType().equals("支付宝充值")){
             spentMoney = "＋"+data.get(i).getSpentMoney();
             myHolder.spent.setTextColor(Color.parseColor("#119DEE"));
             myHolder.spent.setText(spentMoney);
             myHolder.time.setText(data.get(i).getTime());
-        }
-        else {
+        } else {
             spentMoney = "－"+data.get(i).getSpentMoney();
             myHolder.spent.setText(spentMoney);
             myHolder.time.setText(data.get(i).getTime());

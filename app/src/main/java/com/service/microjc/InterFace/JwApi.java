@@ -4,6 +4,8 @@ import com.service.microjc.stType.ExamInfo;
 import com.service.microjc.stType.JwUserInfo;
 import com.service.microjc.stType.LoginInfo;
 import com.service.microjc.stType.PureInfo;
+import com.service.microjc.stType.RequestRoomInfo;
+import com.service.microjc.stType.RoomResultInfo;
 import com.service.microjc.stType.ScoresInfo;
 
 import okhttp3.ResponseBody;
@@ -35,12 +37,17 @@ public interface JwApi {
 
     //补考考试安排查询
     @Headers({"Content-Type: application/json","Accept: application/json"})//添加header表明参数是json格式的
-    @POST("/microjc//getexamagaininfo")
+    @POST("/microjc/getexamagaininfo")
     Call<ExamInfo> getSecondExamInfo(@Body LoginInfo loginInfo);
 
     //获取 课表 html
     @Headers({"Content-Type: application/json","Accept: application/json"})//添加header表明参数是json格式的
-    @POST("/microjc//getkbhtml")
+    @POST("/microjc/getkbhtml")
     Call<ResponseBody> getKbHtml(@Body LoginInfo loginInfo);
+
+    //获取 空教室
+    @Headers({"Content-Type: application/json","Accept: application/json"})//添加header表明参数是json格式的
+    @POST("/microjc/getroomhtml")
+    Call<RoomResultInfo> getRoom(@Body RequestRoomInfo requestRoomInfo);
 
 }

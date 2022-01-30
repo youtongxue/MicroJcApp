@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TitleLayout">
+        //项目中资源id
+        <attr name="background" format="reference" />
+        <attr name="navBackground" format="color" />
+        <attr name="src" format="reference" />
+        //颜色
+        <attr name = "textColor" format = "color" />
+        //布尔值
+        <attr name = "focusable" format = "boolean" />
+        //尺寸值 dp，sp，px等
+        <attr name = "width" format = "dimension" />
+        //字符串
+        <attr name = "textStr" format = "string" />
+        //枚举值
+        <attr name="orientation">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+        <attr name="titleName" format="string"/>
+    </declare-styleable>
+</resources>

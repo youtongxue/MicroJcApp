@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.service.microjc.Activity.App.uicustomviews.BaseActivity;
 import com.service.microjc.InterFace.YktApi;
 import com.service.microjc.NetworkFactory;
 import com.service.microjc.R;
@@ -40,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RecordActivity extends AppCompatActivity {
+public class RecordActivity extends BaseActivity {
     public String username;//定义全局变量用户名和密码
     public String password;
     public String start;//存储用于消费记录网络请求的 开始 时间 2021-8-8 这种格式
@@ -55,10 +56,6 @@ public class RecordActivity extends AppCompatActivity {
     private long MaxTimeStamp = System.currentTimeMillis();//当前long格式时间戳
     private long MinTimeStamp;//用于设置最小时间戳，是当前时间往前推5年
 
-    public RecordActivity() {
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -69,27 +66,12 @@ public class RecordActivity extends AppCompatActivity {
 
 
         getMinTimeStamp();
-        SetMargin();
-        goBack();
 
         Log.e("方法是否执行", "onCreate:>>>>>>>>>>>>>>>>>>> "+MinTimeStamp );
 
         initView();
-        ImmersionBar.with(RecordActivity.this)
-                .statusBarColor(R.color.white)
-                .navigationBarColor(R.color.white)
-                .statusBarDarkFont(true)   //状态栏字体是深色，不写默认为亮色
-                .init();
-
-        //隐藏action bar
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.hide();
-
         //初始化
         DialogX.init(this);
-        Window window = getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);//清除
 
         //获取当前时间，Util包的Date
         Date date = new Date();//这里的date是时间戳
@@ -148,39 +130,6 @@ public class RecordActivity extends AppCompatActivity {
         recyclerView.setAdapter(recyclerViewAdapter);//添加适配器
     }
 
-    /**
-     * 获取状态栏高度，设置layout的margin——top值
-     *
-     * */
-    public void SetMargin(){
-        //获取状态栏高度
-        int statusBarHeight1 = 0;
-        //获取status_bar_height资源的ID
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            //根据资源ID获取响应的尺寸值
-            statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
-        }
-        Log.e("TAG", "方法1状态栏高度:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + statusBarHeight1);
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        lp.setMargins(0, statusBarHeight1, 0, 0);
-
-
-        RelativeLayout titleLayout1 = findViewById(R.id.titleRelative_record);
-        titleLayout1.setLayoutParams(lp);
-    }
-
-    /**
-     * 图标返回
-     * */
-    public void goBack(){
-        //商铺图片
-        ImageView backIcon = findViewById(R.id.fanhui_tsg);
-
-        backIcon.setOnClickListener(v -> finish());
-    }
 
     /**
      * 消费记录网络请求

@@ -27,7 +27,7 @@ android {
         variant ->
             variant.outputs.all {
                 // 此处指定生成的apk文件名
-                outputFileName = "锦城微服务.apk"
+                outputFileName = "We锦大.apk"
             }
     }
 
@@ -85,6 +85,20 @@ dependencies {
     //下拉
     implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'
     implementation  'com.scwang.smart:refresh-header-classics:2.0.1'    //经典刷新头
+
+    //Tencent QQ接入本地sdk
+    implementation fileTree(dir: 'libs', include: '*.jar')
+
+    //按钮
+    implementation 'com.kyleduo.switchbutton:library:2.1.0'
+
+    //DialogXSample
+    implementation 'com.github.kongzue.DialogXSample:CustomWheelPicker:0.0.1.alpha6'
+    implementation 'com.github.kongzue.DialogXSample:DatePicker:0.0.1.alpha6'
+
+
+
+
 
 
 }

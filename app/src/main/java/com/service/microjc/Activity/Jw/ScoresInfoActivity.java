@@ -1,7 +1,9 @@
 package com.service.microjc.Activity.Jw;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -14,6 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kongzue.dialogx.customwheelpicker.CustomWheelPickerDialog;
+import com.kongzue.dialogx.customwheelpicker.interfaces.OnCustomWheelPickerSelected;
+import com.kongzue.dialogx.customwheelpicker.interfaces.OnWheelChangeListener;
+import com.kongzue.dialogx.style.IOSStyle;
+import com.service.microjc.Activity.App.uicustomviews.BaseActivity;
 import com.service.microjc.InterFace.JwApi;
 import com.service.microjc.NetworkFactory;
 import com.service.microjc.R;
@@ -40,20 +47,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ScoresInfoActivity extends AppCompatActivity {
+public class ScoresInfoActivity extends BaseActivity {
 //    public String username;//定义全局变量用户名和密码
 //    public String password;
     private final List<ScoresInfo.Info> arrayList = new ArrayList<>();
     private ScoresInfoAdapter recyclerViewAdapter;
     private LoginInfo loginInfo = new LoginInfo();
     private TextView xn;
-    private TextView xq;
     //dialog弹窗
-    private final String[] singleSelectMenuText = new String[]{"2016-2017学年","2017-2018学年","2018-2019学年","2019-2020学年", "2020-2021学年"};
-    private int selectMenuIndex;
-
-    private final String[] data = new String[]{"第1学期", "第2学期", "第3学期"};
-    private int Index;
+    private int[] defaultCustomWheelSelect = new int[]{3,0};//wheelpicker选中默认行
 
 
     @Override
@@ -63,33 +65,9 @@ public class ScoresInfoActivity extends AppCompatActivity {
 
         //初始化
         DialogX.init(this);
-        //设置为IOS主题
-        DialogX.globalStyle = new MIUIStyle();
 
-        SetMargin();
-        goBack();
         selectXnXq();//选择学年，学期监听事件
-
         initView();
-        ImmersionBar.with(ScoresInfoActivity.this)
-                .statusBarColor(R.color.white)
-                .navigationBarColor(R.color.white)
-                .statusBarDarkFont(true)   //状态栏字体是深色，不写默认为亮色
-                .init();
-
-        //隐藏action bar
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.hide();
-
-
-        Window window = getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);//清除
-
-
-
-
-
     }
 
     private void initView() {
@@ -102,43 +80,14 @@ public class ScoresInfoActivity extends AppCompatActivity {
         recyclerView.setAdapter(recyclerViewAdapter);//添加适配器
     }
 
-    /**
-     * 获取状态栏高度，设置layout的margin——top值
-     *
-     * */
-    public void SetMargin(){
-        //获取状态栏高度
-        int statusBarHeight1 = 0;
-        //获取status_bar_height资源的ID
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            //根据资源ID获取响应的尺寸值
-            statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
-        }
-        Log.e("TAG", "方法1状态栏高度:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + statusBarHeight1);
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        lp.setMargins(0, statusBarHeight1, 0, 0);
-
-
-        RelativeLayout titleLayout1 = findViewById(R.id.titleRelative_scores);
-        titleLayout1.setLayoutParams(lp);
-    }
-
-    /**
-     * 图标返回
-     * */
-    public void goBack(){
-        ImageView fanhui_img = findViewById(R.id.fanhui_jwUserInfo);
-
-        fanhui_img.setOnClickListener(v -> finish());
-    }
 
     /**
      * 选择学年监听
      * */
     private void selectXnXq(){
+        //设置为IOS主题
+        DialogX.globalStyle = new MIUIStyle();
+
         //接收JwUserInfoActivity传过来的参数
         loginInfo = (LoginInfo) getIntent().getSerializableExtra("loginInfo");
 
@@ -156,51 +105,53 @@ public class ScoresInfoActivity extends AppCompatActivity {
         xqInfo.put("第3学期", "3");
 
         xn = findViewById(R.id.scord_xn);
-        xq = findViewById(R.id.scord_xq);
-        xn.setOnClickListener(v -> BottomMenu.show(singleSelectMenuText)
-                .setStyle(MIUIStyle.style())
-                .setTheme(DialogX.THEME.AUTO)
-//                        .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
-                .setTitle("选择学年")
-                .setOnMenuItemClickListener(new OnMenuItemSelectListener<BottomMenu>() {
-                    @Override
-                    public void onOneItemSelect(BottomMenu dialog, CharSequence text, int index, boolean select) {
-                        selectMenuIndex = index;
-                    }
-                })
-                .setCancelButton("确定", (OnDialogButtonClickListener<BottomDialog>) (baseDialog, v1) -> {
+        xn.setOnClickListener(v -> {
+            DialogX.globalStyle = new MIUIStyle();
+            CustomWheelPickerDialog.build()
+                    .addWheel(new String[]{"2018-2019学年", "2019-2020学年", "2020-2021学年", "2021-2022学年"})
+                    .addWheel(new String[]{"第1学期", "第2学期", "第3学期"})    //添加列表项
+                    .setOnWheelChangeListener(new OnWheelChangeListener() {
+                        /**
+                         * 当滚轮滑动时触发
+                         * @param picker            滑动对话框
+                         * @param wheelIndex        当前是第几个列表项触发滑动
+                         * @param originWheelData   原始列表项数据
+                         * @param itemIndex         已选中数据的索引
+                         * @param itemText          已选中数据的内容
+                         */
+                        @SuppressLint("ResourceAsColor")
+                        @Override
+                        public void onWheel(CustomWheelPickerDialog picker, int wheelIndex, String[] originWheelData, int itemIndex, String itemText) {
 
-                    Log.e("test", "selectXnXq: "+xnInfo.get(singleSelectMenuText[selectMenuIndex]) );
 
-                    loginInfo.setXn(xnInfo.get(singleSelectMenuText[selectMenuIndex]));//注入实体类
-                    xn.setText(singleSelectMenuText[selectMenuIndex]);
-                    return false;
-                })
-                .setSelection(selectMenuIndex));
+                        }
+                    })
+                    .setDefaultSelect(0, defaultCustomWheelSelect[0])
+                    .setDefaultSelect(1, defaultCustomWheelSelect[1])
+                    .show(new OnCustomWheelPickerSelected() {
+                        /**
+                         * 当确认后，
+                         * @param picker        滑动对话框
+                         * @param text          返回默认文本，例如“初中 初4班 声乐组”
+                         * @param selectedTexts 选中的每个列表项文本集合
+                         * @param selectedIndex 选中的每个列表项索引集合
+                         */
+                        @Override
+                        public void onSelected(CustomWheelPickerDialog picker, String text, String[] selectedTexts, int[] selectedIndex) {
+                            defaultCustomWheelSelect = selectedIndex;
 
-        //设置学期
-        xq.setOnClickListener(v -> BottomMenu.show(data)
-                .setStyle(MIUIStyle.style())
-                .setTheme(DialogX.THEME.AUTO)
-//                        .setMessage("这里是权限确认的文本说明，这是一个演示菜单")
-                .setTitle("选择学期")
-                .setOnMenuItemClickListener(new OnMenuItemSelectListener<BottomMenu>() {
-                    @Override
-                    public void onOneItemSelect(BottomMenu dialog, CharSequence text, int index, boolean select) {
-                        Index = index;
-                    }
-                })
-                .setCancelButton("查询", (OnDialogButtonClickListener<BottomDialog>) (baseDialog, v12) -> {
+                            //更改UI
+                            xn.setText(selectedTexts[0]+"的"+selectedTexts[1]);
+                            //发起网络请求
+                            loginInfo.setXn(xnInfo.get(selectedTexts[0]));
+                            loginInfo.setXq(xqInfo.get(selectedTexts[1]));
 
-                    loginInfo.setXq(xqInfo.get(data[Index]));//注入实体类
-                    xq.setText(data[Index]);//更新UI界面
+                            //查询http
+                            getScores();
 
-                    //调用查询http请求
-                    getScores();
-
-                    return false;
-                })
-                .setSelection(Index));
+                        }
+                    });
+        });
 
 
     }
@@ -210,6 +161,7 @@ public class ScoresInfoActivity extends AppCompatActivity {
      * 查询成绩网络请求
      * */
     private void getScores(){
+        DialogX.globalStyle = new IOSStyle();
         //调用前先清空集合内容
         arrayList.clear();
         //显示等待进度框

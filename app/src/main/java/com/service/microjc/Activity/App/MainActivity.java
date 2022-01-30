@@ -2,9 +2,13 @@ package com.service.microjc.Activity.App;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,7 +21,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.service.microjc.CustomUtils;
+import com.service.microjc.Activity.App.Utils.DownloadUtils;
+import com.service.microjc.Activity.App.Utils.CustomUtils;
 import com.service.microjc.Fragment.My_Fragment;
 import com.service.microjc.Fragment.RiCheng_Fragment;
 import com.service.microjc.Fragment.School_Fragment;
@@ -40,6 +45,7 @@ import retrofit2.Response;
 //对于单击显示当前页面由MainActivity.java来实现
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "test";
     /*声明组件变量*/
     private ImageView riCheng = null;
     private ImageView school = null;
@@ -47,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView rc = null;
     private TextView xy = null;
     private TextView w = null;
+    private SharedPreferences sp;
 
     FragmentManager fm;
     FragmentTransaction transaction;
@@ -61,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fm = getSupportFragmentManager();
-
         //实例化按钮文本
         rc = findViewById(R.id.richeng_text);
         xy = findViewById(R.id.xiaoyuan_text);
@@ -71,11 +77,43 @@ public class MainActivity extends AppCompatActivity {
         school =findViewById(R.id.xy_img);
         wd=findViewById(R.id.jww_img);
 
-        SetDefault();
-        CheckUpData();
-        setStatus();
-        checkPermission();
 
+        setStatus();
+        SetDefault();
+        //CheckUpData();
+        checkPermission();
+        fromLogin();
+        initSwitchButton();//初始化设置页面按钮状态
+        try {
+            testRsa();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d("TAG>>>>>>>>", "-->onStart");
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "-->onResume");
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "-->onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "-->onStop");
+        super.onStop();
     }
 
     //重写返回键回掉方法，让按下返回键时 让当前activity隐藏到后台，而不是 调用 finish(); ，第二次打开时就不会再次加载Splash界面
@@ -187,61 +225,61 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 每次打开就检查App是否需要更新
      * */
-    public  void  CheckUpData(){
-        //发起网络访问
-        //实例化一个请求对象 api
-        CheckUpData checkUpData = NetworkFactory.checkUpData();
-        Call<AppInfo> Y = checkUpData.getVersion();
-        Y.enqueue(new Callback<AppInfo>() {
-            @Override
-            public void onResponse(@NotNull Call<AppInfo> call, @NotNull Response<AppInfo> response) {
-                AppInfo appInfo = response.body();
-                assert appInfo != null;
-                float getCode = appInfo.getVersion();
-                float appCode = Float.parseFloat(CustomUtils.getVersion(MainActivity.this));
-
-                if (getCode > appCode) {
-
-                    MessageDialog.build()
-                            .setStyle(IOSStyle.style())
-                            .setTheme(DialogX.THEME.AUTO)
-                            .setTitle("更新提示")
-                            .setMessage(appInfo.getUpDataContent())
-                            .setOkButton("下载")
-                            .setCancelable(true)
-                            .setBackgroundColor(Color.parseColor("#FFFFFF"))
-                            .setOkButton((baseDialog, v) -> {
-
-                                DownloadUtils downloadUtils = new DownloadUtils(MainActivity.this);
-                                String url = "http://1.14.68.248/appupdata/app/锦城微服务"+getCode+".apk";
-                                String name = "锦城微服务"+getCode+".apk";
-                                downloadUtils.downloadAPK(url,name,name);
-
-                                return false;
-                            })
-                            .show();
-
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<AppInfo> call, @NotNull Throwable t) {
-                MessageDialog.build()
-                        .setStyle(IOSStyle.style())
-                        .setTheme(DialogX.THEME.AUTO)
-                        .setTitle("🙅‍♂️")
-                        .setMessage("网络错误")
-                        .setOkButton("确定")
-                        .setCancelable(true)
-                        .setBackgroundColor(Color.parseColor("#FFFFFF"))
-                        .show();
-
-            }
-
-        });
-    }
+//    public  void  CheckUpData(){
+//        //发起网络访问
+//        //实例化一个请求对象 api
+//        CheckUpData checkUpData = NetworkFactory.checkUpData();
+//        Call<AppInfo> Y = checkUpData.getVersion();
+//        Y.enqueue(new Callback<AppInfo>() {
+//            @Override
+//            public void onResponse(@NotNull Call<AppInfo> call, @NotNull Response<AppInfo> response) {
+//                AppInfo appInfo = response.body();
+//                assert appInfo != null;
+//                float getCode = appInfo.getVersion();
+//                float appCode = Float.parseFloat(CustomUtils.getVersion(MainActivity.this));
+//
+//                if (getCode > appCode) {
+//
+//                    MessageDialog.build()
+//                            .setStyle(IOSStyle.style())
+//                            .setTheme(DialogX.THEME.AUTO)
+//                            .setTitle("更新提示")
+//                            .setMessage(appInfo.getUpDataContent())
+//                            .setOkButton("下载")
+//                            .setCancelable(true)
+//                            .setBackgroundColor(Color.parseColor("#FFFFFF"))
+//                            .setOkButton((baseDialog, v) -> {
+//
+//                                DownloadUtils downloadUtils = new DownloadUtils(MainActivity.this);
+//                                String url = "http://1.14.68.248/appupdata/app/We锦大"+getCode+".apk";
+//                                String name = "We锦大"+getCode+".apk";
+//                                downloadUtils.downloadAPK(url,name,name);
+//
+//                                return false;
+//                            })
+//                            .show();
+//
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(@NotNull Call<AppInfo> call, @NotNull Throwable t) {
+//                MessageDialog.build()
+//                        .setStyle(IOSStyle.style())
+//                        .setTheme(DialogX.THEME.AUTO)
+//                        .setTitle("🙅‍♂️")
+//                        .setMessage("网络错误")
+//                        .setOkButton("确定")
+//                        .setCancelable(true)
+//                        .setBackgroundColor(Color.parseColor("#FFFFFF"))
+//                        .show();
+//
+//            }
+//
+//        });
+//    }
 
     /**
      * 设置状态栏
@@ -249,11 +287,7 @@ public class MainActivity extends AppCompatActivity {
     private void setStatus(){
         //设置状态栏
         ImmersionBar.with(MainActivity.this)
-//                .statusBarColor(R.color.white)
-                .statusBarAlpha(0f)//设置状态栏背景不透明度
-                .navigationBarColor(R.color.white)
-                .navigationBarDarkIcon(true)
-
+                .statusBarDarkFont(true, 0.2f)
                 .init();
 
         //隐藏action bar
@@ -280,11 +314,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /***
+     * 登录后，选中状态
+     */
+    public void fromLogin(){
+        Intent intent = getIntent();
+        int from = intent.getIntExtra("from",0);
+        if (from == 1 ){
+            clearSelection();//清除状态
+            transaction = fm.beginTransaction();
+            wd.setImageResource(R.drawable.ic_tab_my_pressed);//修改布局中的图片
+            w.setTextColor(Color.parseColor("#FDC102") );//修改字体颜色
+            frag3 = new My_Fragment();
+            transaction.add(R.id.fragment, frag3, "Frag3");
+            transaction.show(frag3);
+            transaction.commit();
+
+            //
+        }
+    }
+
+    //test
+    public void testRsa() throws Exception {
 
 
+    }
+
+    /**
+     * 设置switchButton默认状态
+     * */
+    private void initSwitchButton(){
+        sp = getSharedPreferences("SwitchButton", Context.MODE_PRIVATE);
+        if (sp.getInt("FirstOpen",0) == 0){
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putBoolean("SaveUserInfo",true);
+            editor.putInt("FirstOpen",1);
+            editor.apply();
+        }
 
 
-
+    }
 
 }
 

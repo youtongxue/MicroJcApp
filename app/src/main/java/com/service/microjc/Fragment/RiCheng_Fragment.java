@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
-import android.icu.util.Calendar;
-import android.icu.util.TimeZone;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +22,7 @@ import android.widget.TextView;
 
 import com.service.microjc.Activity.ToDo.MySQLiteOpenHelper;
 import com.service.microjc.Activity.ToDo.NewToDoActivity;
-import com.service.microjc.CustomUtils;
+import com.service.microjc.Activity.App.Utils.CustomUtils;
 import com.service.microjc.R;
 import com.service.microjc.stType.TimeInfo;
 import com.service.microjc.stType.ToDoInfo;
@@ -46,7 +44,6 @@ import androidx.annotation.RequiresApi;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class RiCheng_Fragment extends ImmersionFragment {
     private static final String TAG = "生命周期被调用>>>>>>>>>>>>>>>";
@@ -210,6 +207,12 @@ public class RiCheng_Fragment extends ImmersionFragment {
 
 
         miui10Calendar = view.findViewById(R.id.miui10Calendar);
+
+        //日历标点
+//        InnerPainter innerPainter = (InnerPainter) miui10Calendar.getCalendarPainter();
+//        List<String> defaultCustomWheelSelect = new ArrayList<>();
+//        defaultCustomWheelSelect.add("2021-11-11");
+//        innerPainter.setPointList(defaultCustomWheelSelect);
 
         miui10Calendar.setOnCalendarChangedListener(new OnCalendarChangedListener() {
             @Override

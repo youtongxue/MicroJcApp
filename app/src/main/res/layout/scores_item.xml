@@ -14,15 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
             android:clickable="false"
             android:minHeight="110dp"
             app:cardBackgroundColor="#337DFA"
             app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
 
-            >
+            app:cardElevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -104,7 +103,7 @@
                     app:layout_constraintTop_toTopOf="@+id/credit" />
 
                 <TextView
-                    android:id="@+id/GPA"
+                    android:id="@+id/gpa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
